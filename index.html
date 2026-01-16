@@ -135,25 +135,18 @@
 
 </body>
 <script>
-  const videos = [
-    "videos/hero1.mp4",
-    "videos/hero2.mp4",
-    "videos/hero3.mp4"
-  ];
-
+  <script>
+  const slides = document.querySelectorAll('.slide');
   let current = 0;
-  const video = document.getElementById("heroVideo");
 
-  function playNext() {
-    video.src = videos[current];
-    video.load();
-    video.play().catch(() => {});
-    current = (current + 1) % videos.length;
-  }
-
-  video.addEventListener("ended", playNext);
-  playNext();
+  setInterval(() => {
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }, 4000);
 </script>
+
+
 
 
 
