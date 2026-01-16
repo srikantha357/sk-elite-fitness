@@ -31,9 +31,9 @@
     muted
     loop
     playsinline
-  ></video>
-
-  <div class="hero-overlay"></div>
+  >
+    <source src="videos/hero1.mp4" type="video/mp4">
+  </video>
 
   <div class="hero-content">
     <h1>Transform Your Body. Build Strength. Live Elite.</h1>
@@ -41,6 +41,24 @@
     <a href="#contact" class="btn">Start Your Fitness Journey</a>
   </div>
 </section>
+
+<script>
+  const videos = [
+    "videos/hero1.mp4",
+    "videos/hero2.mp4",
+    "videos/hero3.mp4"
+  ];
+
+  let index = 0;
+  const videoElement = document.getElementById("heroVideo");
+
+  videoElement.addEventListener("ended", () => {
+    index = (index + 1) % videos.length;
+    videoElement.src = videos[index];
+    videoElement.play();
+  });
+</script>
+
 
 
 
@@ -155,6 +173,7 @@
   video.addEventListener("ended", playNext);
   playNext();
 </script>
+
 
 
 
