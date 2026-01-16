@@ -25,15 +25,13 @@
 </header>
 
 <!-- HERO SECTION -->
-<section id="home" class="hero">
-  <video id="heroVideo" autoplay muted loop playsinline></video>
+<video
+  id="heroVideo"
+  muted
+  playsinline
+  preload="auto"
+></video>
 
-  <div class="hero-content">
-    <h1>Transform Your Body. Build Strength. Live Elite.</h1>
-    <p>Personalized online fitness coaching backed by science and consistency.</p>
-    <a href="#contact" class="btn">Start Your Fitness Journey</a>
-  </div>
-</section>
 
 
 <!-- SERVICES -->
@@ -133,19 +131,30 @@
     "videos/hero3.mp4"
   ];
 
-  let currentVideo = 0;
-  const videoElement = document.getElementById("heroVideo");
+  let index = 0;
+  const video = document.getElementById("heroVideo");
 
-  function playNextVideo() {
-    videoElement.src = videos[currentVideo];
-    videoElement.load();
-    videoElement.play();
+  function loadVideo(i) {
+    video.src = videos[i];
+    video.load();
 
-    currentVideo = (currentVideo + 1) % videos.length;
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        document.body.addEventListener(
+          "touchstart",
+          () => video.play(),
+          { once: true }
+        );
+      });
+    }
   }
 
-  videoElement.addEventListener("ended", playNextVideo);
+  video.onended = () => {
+    index = (index + 1) % videos.length;
+    loadVideo(index);
+  };
 
-  // Start first video
-  playNextVideo();
+  loadVideo(index);
 </script>
+
