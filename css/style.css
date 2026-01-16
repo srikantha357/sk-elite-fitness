@@ -8,13 +8,21 @@ body {
 /* HERO SECTION */
 .hero {
   position: relative;
-  text-align: center;
+  height: 70vh;
+  overflow: hidden;
 }
 
 .hero img {
   width: 100%;
-  max-height: 60vh;
+  height: 100%;
   object-fit: cover;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
 }
 
 .hero-text {
@@ -22,19 +30,22 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white;
-  background: rgba(0,0,0,0.6);
-  padding: 20px;
+  z-index: 2;
+  text-align: center;
+  color: #fff;
+  max-width: 90%;
 }
 
 .hero-text h1 {
-  font-size: 32px;
-  margin: 0;
+  font-size: 48px;
+  margin-bottom: 10px;
 }
 
 .hero-text p {
-  font-size: 18px;
+  font-size: 22px;
+  font-weight: 300;
 }
+
 
 /* CONTENT */
 section {
