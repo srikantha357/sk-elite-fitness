@@ -25,39 +25,22 @@
 </header>
 
 <section id="home" class="hero">
-  <video
-    id="heroVideo"
+  <video class="hero-video"
     autoplay
     muted
     loop
     playsinline
-  >
+    preload="auto">
     <source src="videos/hero1.mp4" type="video/mp4">
   </video>
+
+  <div class="hero-overlay"></div>
 
   <div class="hero-content">
     <h1>Transform Your Body. Build Strength. Live Elite.</h1>
     <p>Personalized online fitness coaching backed by science and consistency.</p>
-    <a href="#contact" class="btn">Start Your Fitness Journey</a>
   </div>
 </section>
-
-<script>
-  const videos = [
-    "videos/hero1.mp4",
-    "videos/hero2.mp4",
-    "videos/hero3.mp4"
-  ];
-
-  let index = 0;
-  const videoElement = document.getElementById("heroVideo");
-
-  videoElement.addEventListener("ended", () => {
-    index = (index + 1) % videos.length;
-    videoElement.src = videos[index];
-    videoElement.play();
-  });
-</script>
 
 
 
@@ -173,6 +156,7 @@
   video.addEventListener("ended", playNext);
   playNext();
 </script>
+
 
 
 
