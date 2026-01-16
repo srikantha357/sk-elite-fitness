@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK Elite Fitness | Online Fitness Coaching</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK Elite Fitness | Online Fitness Coaching</title>
+
+  <link rel="stylesheet" href="style.css">
 </head>
-    
-<script>
-function toggleMenu() {
-  document.getElementById("navLinks").classList.toggle("show");
-}
-</script>
 
 <body>
 
-<!-- NAVBAR -->
+<!-- ================= NAVBAR ================= -->
 <header class="navbar">
   <div class="nav-left">
     <img src="logo.png" class="logo-img" alt="SK Elite Fitness">
@@ -25,143 +20,109 @@ function toggleMenu() {
   <div class="menu-icon" onclick="toggleMenu()">☰</div>
 
   <nav class="nav-links" id="navLinks">
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#services">Services</a>
+    <a href="#home" onclick="toggleMenu()">Home</a>
+    <a href="#about" onclick="toggleMenu()">About</a>
+    <a href="#services" onclick="toggleMenu()">Services</a>
     <a href="blog.html">Blog</a>
-    <a href="#contact">Contact</a>
+    <a href="#contact" onclick="toggleMenu()">Contact</a>
   </nav>
 </header>
 
-
-<section id="home" class="hero">
-  <section class="hero" id="home">
-  <div class="hero-slider">
+<!-- ================= HERO SECTION ================= -->
+<section class="hero" id="home">
+  <div class="slider">
     <img src="images/hero1.jpg" class="slide active">
     <img src="images/hero2.jpg" class="slide">
     <img src="images/hero3.jpg" class="slide">
   </div>
 
-  <div class="hero-content">
-    <h1>Transform Your Body. Build Strength. Live Elite.</h1>
-    <p>Personalized online fitness coaching backed by science and consistency.</p>
-    <a href="#contact" class="btn">Start Your Fitness Journey</a>
+  <div class="hero-text">
+    <h1>Transform Your Body.<br>Build Strength.<br>Live Elite.</h1>
+    <p>Personalized online fitness coaching backed by science.</p>
+
+    <!-- PAYMENT BUTTON -->
+    <a href="https://rzp.io/l/YOUR_PAYMENT_LINK" class="cta-btn">
+      Join Coaching
+    </a>
   </div>
 </section>
 
+<!-- ================= ABOUT ================= -->
+<section id="about" class="about">
+  <h2>About the Coach</h2>
+  <p>
+    Hi, I'm Srikanth — founder of SK Elite Fitness.  
+    I help people transform their bodies, confidence, and discipline
+    through structured training and lifestyle coaching.
+  </p>
+</section>
 
+<!-- ================= SERVICES ================= -->
+<section id="services" class="services">
+  <h2>Our Services</h2>
 
-
-
-
-<!-- SERVICES -->
-<section id="services" class="section">
-    <h2>Our Services</h2>
-    <div class="cards">
-        <div class="card">
-            <h3>Online Personal Training</h3>
-            <p>Custom workout plans designed for your goals, lifestyle, and schedule.</p>
-        </div>
-        <div class="card">
-            <h3>Fat Loss Transformation</h3>
-            <p>Sustainable fat loss programs focused on long-term results.</p>
-        </div>
-        <div class="card">
-            <h3>Muscle & Strength Training</h3>
-            <p>Build lean muscle and strength using progressive training methods.</p>
-        </div>
-        <div class="card">
-            <h3>Lifestyle Coaching</h3>
-            <p>Habit building, accountability, and consistency-focused coaching.</p>
-        </div>
+  <div class="service-grid">
+    <div class="service-card">
+      <h3>Strength Training</h3>
+      <p>
+        Build lean muscle and raw strength using progressive,
+        science-based training programs.
+      </p>
     </div>
-</section>
 
-<!-- ABOUT -->
-<section id="about" class="section light">
-    <h2>About the Coach</h2>
-    <p class="about-text">
-        Hi, I’m <strong>Srikanth</strong>, founder of <strong>SK Elite Fitness</strong>.
-        I help people transform their bodies and confidence through structured training,
-        smart lifestyle choices, and sustainable fitness methods.
-    </p>
-    <p class="about-text">
-        No extreme diets. No shortcuts. Just disciplined progress and elite results.
-    </p>
-</section>
-
-<!-- PROGRAMS -->
-<section id="programs" class="section">
-    <h2>Coaching Programs</h2>
-    <div class="cards">
-        <div class="card">
-            <h3>1-on-1 Online Coaching</h3>
-            <p>Fully customized training, progress tracking, and continuous support.</p>
-        </div>
-        <div class="card">
-            <h3>Fat Loss Program</h3>
-            <p>Structured workouts and lifestyle guidance to lose fat effectively.</p>
-        </div>
-        <div class="card">
-            <h3>Strength & Conditioning</h3>
-            <p>Improve strength, performance, and injury resistance.</p>
-        </div>
+    <div class="service-card">
+      <h3>Fat Loss Transformation</h3>
+      <p>
+        Sustainable fat loss through training, nutrition,
+        and accountability coaching.
+      </p>
     </div>
+
+    <div class="service-card">
+      <h3>Lifestyle Coaching</h3>
+      <p>
+        Habit building, mindset coaching, discipline,
+        and long-term consistency.
+      </p>
+    </div>
+  </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contact" class="section light">
-    <h2>Get Started</h2>
-    <p>Ready to begin your fitness journey?</p>
-
-    <form class="contact-form">
-        <input type="text" placeholder="Your Name" required>
-        <input type="email" placeholder="Your Email" required>
-        <textarea placeholder="Your Fitness Goal" required></textarea>
-        <button type="submit" class="btn">Send Message</button>
-    </form>
-
-    <p class="contact-info">
-        📧 Email: srikantha357@gmail.com <br>
-        📱 WhatsApp: +91-9635493218
-    </p>
+<!-- ================= CONTACT ================= -->
+<section id="contact" class="contact">
+  <h2>Get Started</h2>
+  <p>Message us on WhatsApp to begin your transformation.</p>
 </section>
 
-<!-- FOOTER -->
+<!-- ================= FOOTER ================= -->
 <footer>
-    <p>© 2026 SK Elite Fitness | Train Smart. Stay Consistent. Get Elite Results.</p>
+  <p>© 2026 SK Elite Fitness | Train Smart. Stay Consistent. Get Elite Results.</p>
 </footer>
 
-</body><a href="https://wa.me/919635493218?text=Hi%20I%20want%20to%20start%20online%20fitness%20coaching" 
-   class="whatsapp-float" target="_blank">
+<!-- ================= WHATSAPP FLOAT ================= -->
+<a href="https://wa.me/919635493218?text=Hi%20I%20want%20to%20start%20online%20fitness%20coaching"
+   class="whatsapp-float"
+   target="_blank">
    💬 Chat on WhatsApp
 </a>
 
-</a>
-
-</a>
-
-</html>
-
-</body>
+<!-- ================= SCRIPTS ================= -->
 <script>
-  <script>
-  const slides = document.querySelectorAll('.slide');
-  let current = 0;
+/* Mobile menu */
+function toggleMenu() {
+  document.getElementById("navLinks").classList.toggle("show");
+}
 
-  setInterval(() => {
-    slides[current].classList.remove('active');
-    current = (current + 1) % slides.length;
-    slides[current].classList.add('active');
-  }, 4000);
+/* Image slider */
+let slides = document.querySelectorAll(".slide");
+let index = 0;
+
+setInterval(() => {
+  slides[index].classList.remove("active");
+  index = (index + 1) % slides.length;
+  slides[index].classList.add("active");
+}, 4000);
 </script>
 
-
-
-
-
-
-
-
-
-
+</body>
+</html>
