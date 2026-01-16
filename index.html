@@ -26,12 +26,15 @@
 
 <!-- HERO SECTION -->
 <section id="home" class="hero">
-    <div class="hero-content">
-        <h2>Transform Your Body. Build Strength. Live Elite.</h2>
-        <p>Personalized online fitness coaching backed by science and consistency.</p>
-        <a href="#contact" class="btn">Start Your Fitness Journey</a>
-    </div>
+  <video id="heroVideo" autoplay muted loop playsinline></video>
+
+  <div class="hero-content">
+    <h1>Transform Your Body. Build Strength. Live Elite.</h1>
+    <p>Personalized online fitness coaching backed by science and consistency.</p>
+    <a href="#contact" class="btn">Start Your Fitness Journey</a>
+  </div>
 </section>
+
 
 <!-- SERVICES -->
 <section id="services" class="section">
@@ -121,3 +124,28 @@
 </a>
 
 </html>
+
+</body>
+<script>
+  const videos = [
+    "videos/hero1.mp4",
+    "videos/hero2.mp4",
+    "videos/hero3.mp4"
+  ];
+
+  let currentVideo = 0;
+  const videoElement = document.getElementById("heroVideo");
+
+  function playNextVideo() {
+    videoElement.src = videos[currentVideo];
+    videoElement.load();
+    videoElement.play();
+
+    currentVideo = (currentVideo + 1) % videos.length;
+  }
+
+  videoElement.addEventListener("ended", playNextVideo);
+
+  // Start first video
+  playNextVideo();
+</script>
