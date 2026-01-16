@@ -25,22 +25,20 @@
 </header>
 
 <section id="home" class="hero">
-  <video class="hero-video"
-    autoplay
-    muted
-    loop
-    playsinline
-    preload="auto">
-    <source src="videos/hero1.mp4" type="video/mp4">
-  </video>
-
-  <div class="hero-overlay"></div>
+  <section class="hero" id="home">
+  <div class="hero-slider">
+    <img src="images/hero1.jpg" class="slide active">
+    <img src="images/hero2.jpg" class="slide">
+    <img src="images/hero3.jpg" class="slide">
+  </div>
 
   <div class="hero-content">
     <h1>Transform Your Body. Build Strength. Live Elite.</h1>
     <p>Personalized online fitness coaching backed by science and consistency.</p>
+    <a href="#contact" class="btn">Start Your Fitness Journey</a>
   </div>
 </section>
+
 
 
 
@@ -156,6 +154,7 @@
   video.addEventListener("ended", playNext);
   playNext();
 </script>
+
 
 
 
