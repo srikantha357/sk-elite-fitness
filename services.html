@@ -1,1 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services & Pricing | SK Elite Fitness</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
 
+    <nav class="navbar">
+        <a href="index.html" class="logo">SK ELITE FITNESS</a>
+        <ul class="nav-links">
+            <li><a href="train.html">Train With Me</a></li>
+            <li><a href="services.html" class="active-page">Services</a></li>
+            <li><a href="membership.html">Membership</a></li>
+            <li><a href="cart.html"><i class="fas fa-shopping-cart"></i></a></li>
+        </ul>
+        <div class="hamburger"><i class="fas fa-bars"></i></div>
+    </nav>
+
+    <header class="page-header">
+        <h1>OUR SERVICES & PLANS</h1>
+        <p>Customize your package. Pay only for what you train.</p>
+    </header>
+
+    <section class="membership-section">
+        <div class="container">
+            
+            <div class="plan-selector">
+                <h2>1. Select Duration</h2>
+                <div class="duration-options">
+                    <label class="plan-option selected" onclick="selectPlan(1, 2000)">
+                        <input type="radio" name="duration" checked>
+                        <h3>1 Month</h3>
+                        <p>₹2,000 / mo</p>
+                    </label>
+                    <label class="plan-option" onclick="selectPlan(3, 5000)">
+                        <input type="radio" name="duration">
+                        <h3>3 Months</h3>
+                        <p>₹5,000 <span class="badge">SAVE ₹1000</span></p>
+                    </label>
+                    <label class="plan-option" onclick="selectPlan(6, 9000)">
+                        <input type="radio" name="duration">
+                        <h3>6 Months</h3>
+                        <p>₹9,000 <span class="badge">BEST VALUE</span></p>
+                    </label>
+                </div>
+            </div>
+
+            <div class="service-selector">
+                <h2>2. Add Training Modules</h2>
+                <p>Select the specific training you want to add:</p>
+                
+                <div class="checkbox-group">
+                    <label class="service-check">
+                        <input type="checkbox" value="Strength" checked disabled>
+                        <span class="checkmark"></span>
+                        Strength Training (Base)
+                    </label>
+
+                    <label class="service-check">
+                        <input type="checkbox" value="Cardio" onchange="updateTotal()">
+                        <span class="checkmark"></span>
+                        Cardio & Endurance (+₹500/mo)
+                    </label>
+
+                    <label class="service-check">
+                        <input type="checkbox" value="DMT" onchange="updateTotal()">
+                        <span class="checkmark"></span>
+                        DMT Functional (+₹800/mo)
+                    </label>
+                    
+                    <label class="service-check">
+                        <input type="checkbox" value="Freestyle" onchange="updateTotal()">
+                        <span class="checkmark"></span>
+                        Freestyle Training (+₹600/mo)
+                    </label>
+
+                    <label class="service-check">
+                        <input type="checkbox" value="Diet" onchange="updateTotal()">
+                        <span class="checkmark"></span>
+                        Custom Diet Plan (+₹1000/mo)
+                    </label>
+                </div>
+            </div>
+
+            <div class="checkout-box">
+                <div class="total-price">
+                    <h3>TOTAL PRICE:</h3>
+                    <span id="final-price">₹2,000</span>
+                </div>
+                <button class="cta-button full-width" onclick="addToCart()">ADD TO CART</button>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="copyright">&copy; 2026 SK Elite Fitness.</div>
+    </footer>
+
+    <script>
+        let basePrice = 2000;
+        let multiplier = 1;
+
+        function selectPlan(months, price) {
+            basePrice = price;
+            multiplier = months;
+            document.querySelectorAll('.plan-option').forEach(el => el.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            updateTotal();
+        }
+
+        function updateTotal() {
+            let total = basePrice;
+            const checkboxes = document.querySelectorAll('.service-check input:checked:not(:disabled)');
+            
+            checkboxes.forEach(box => {
+                if(box.value === 'Cardio') total += (500 * multiplier);
+                if(box.value === 'DMT') total += (800 * multiplier);
+                if(box.value === 'Freestyle') total += (600 * multiplier);
+                if(box.value === 'Diet') total += (1000 * multiplier);
+            });
+
+            document.getElementById('final-price').innerText = "₹" + total.toLocaleString();
+        }
+
+        function addToCart() {
+            const duration = document.querySelector('input[name="duration"]:checked').parentNode.querySelector('h3').innerText;
+            const priceText = document.getElementById('final-price').innerText;
+            let services = [];
+            document.querySelectorAll('.service-check input:checked').forEach(box => {
+                services.push(box.parentNode.innerText.trim());
+            });
+
+            const order = { plan: duration, services: services, total: priceText };
+            localStorage.setItem('fitnessOrder', JSON.stringify(order));
+            window.location.href = "cart.html";
+        }
+    </script>
+</body>
+</html>
