@@ -56,7 +56,13 @@
                     <label class="service-check">
                         <input type="checkbox" value="Strength" checked disabled>
                         <span class="checkmark"></span>
-                        Strength Training (Base)
+                        Strength Training (Base Included)
+                    </label>
+
+                    <label class="service-check">
+                        <input type="checkbox" value="WeightLoss" onchange="updateTotal()">
+                        <span class="checkmark"></span>
+                        Weight Loss Program (+₹800/mo)
                     </label>
 
                     <label class="service-check">
@@ -120,6 +126,7 @@
             const checkboxes = document.querySelectorAll('.service-check input:checked:not(:disabled)');
             
             checkboxes.forEach(box => {
+                if(box.value === 'WeightLoss') total += (800 * multiplier);
                 if(box.value === 'Cardio') total += (500 * multiplier);
                 if(box.value === 'DMT') total += (800 * multiplier);
                 if(box.value === 'Freestyle') total += (600 * multiplier);
