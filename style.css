@@ -473,3 +473,35 @@ footer {
     z-index: 1000;
     box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
 }
+/* --- FIX: VISIBILITY FOR FOOTER & SOCIAL LINKS --- */
+
+/* 1. Fix the "Follow The Journey" Link */
+a[href*="instagram"] {
+    color: #D32F2F !important; /* Red Color for the handle */
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+/* 2. Fix the Footer Social Icons (Facebook, etc) */
+footer i, .social-links i {
+    color: white !important;   /* Force Icons to be White */
+    font-size: 1.5rem;         /* Make them slightly bigger */
+    margin: 0 10px;            /* Add spacing between them */
+    transition: 0.3s;
+}
+
+/* 3. Hover Effect for Icons */
+footer i:hover, .social-links i:hover {
+    color: #D32F2F !important; /* Turn Red on Hover */
+    transform: scale(1.2);     /* Pop effect */
+}
+
+/* 4. Ensure Footer Text Links are Visible */
+footer a {
+    color: white !important;
+    text-decoration: none;
+}
+footer a:hover {
+    color: #D32F2F !important;
+}
