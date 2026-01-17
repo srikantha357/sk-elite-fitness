@@ -441,3 +441,85 @@ footer {
         grid-template-columns: 1fr; /* 1 column on phone */
     }
 }
+/* --- CART PAGE STYLES --- */
+
+.cart-section {
+    padding: 50px 5%;
+    background: #f4f4f4;
+    min-height: 60vh;
+}
+
+.cart-box {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.order-summary h3 {
+    color: #D32F2F;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.service-list {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.service-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #111;
+}
+
+/* Form Styles */
+.checkout-form {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.checkout-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.whatsapp-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #25D366; /* WhatsApp Green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.whatsapp-btn:hover {
+    background-color: #1ebc57;
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: #999;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: 15px;
+}
