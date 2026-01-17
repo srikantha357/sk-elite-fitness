@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* This handles the dark overlay behind the form */
         .checkout-overlay {
             display: none; /* Hidden by default */
             position: fixed;
@@ -21,7 +20,6 @@
             padding: 20px;
         }
 
-        /* This is the actual form box */
         .checkout-modal {
             background: #1a1a1a;
             padding: 30px;
@@ -31,9 +29,10 @@
             border: 1px solid #333;
             box-shadow: 0 0 20px rgba(211, 47, 47, 0.3);
             position: relative;
+            max-height: 90vh; /* Prevent it from being too tall on mobile */
+            overflow-y: auto; /* Scroll if needed */
         }
 
-        /* Close 'X' button */
         .close-modal {
             position: absolute;
             top: 15px; right: 20px;
@@ -43,10 +42,11 @@
         }
         .close-modal:hover { color: white; }
 
-        /* Form Inputs */
         .checkout-group { margin-bottom: 15px; }
         .checkout-group label { display: block; color: #ccc; margin-bottom: 5px; font-size: 0.9rem; }
-        .checkout-group input {
+        
+        .checkout-group input, 
+        .checkout-group select {
             width: 100%;
             padding: 12px;
             background: #222;
@@ -54,7 +54,8 @@
             color: white;
             border-radius: 5px;
         }
-        .checkout-group input:focus { border-color: #D32F2F; outline: none; }
+        .checkout-group input:focus,
+        .checkout-group select:focus { border-color: #D32F2F; outline: none; }
     </style>
 </head>
 <body>
@@ -118,8 +119,7 @@
         <div class="summary-box" style="flex: 0.8; min-width: 300px; background: #1a1a1a; color: white; border: 1px solid #333; padding: 25px; border-radius: 8px; height: fit-content;">
             <h3 style="border-bottom: 1px solid #444; padding-bottom: 15px; margin-bottom: 20px; font-size: 1.5rem;">Your Package</h3>
             
-            <div id="selected-items-list" style="margin-bottom: 20px; font-size: 1rem; line-height: 1.6; color:#ccc;">
-                </div>
+            <div id="selected-items-list" style="margin-bottom: 20px; font-size: 1rem; line-height: 1.6; color:#ccc;"></div>
 
             <hr style="border: 0; border-top: 1px solid #444; margin: 15px 0;">
 
@@ -169,10 +169,32 @@
                     <label>Email Address* (For Invoice)</label>
                     <input type="email" id="cust-email" placeholder="you@example.com" required>
                 </div>
+                
                 <div class="checkout-group">
-                    <label>Phone Number*</label>
-                    <input type="tel" id="cust-phone" placeholder="9876543210" required>
+                    <label>Select Country Code*</label>
+                    <select id="cust-country-code">
+                        <option value="+91" selected>India (+91)</option>
+                        <option value="+1">USA / Canada (+1)</option>
+                        <option value="+44">UK (+44)</option>
+                        <option value="+971">UAE (+971)</option>
+                        <option value="+61">Australia (+61)</option>
+                        <option value="+93">Afghanistan (+93)</option>
+                        <option value="+355">Albania (+355)</option>
+                        <option value="+49">Germany (+49)</option>
+                        <option value="+65">Singapore (+65)</option>
+                        <option value="+27">South Africa (+27)</option>
+                        <option value="+82">South Korea (+82)</option>
+                        <option value="+34">Spain (+34)</option>
+                        <option value="+94">Sri Lanka (+94)</option>
+                        <option value="">Other</option>
+                    </select>
                 </div>
+
+                <div class="checkout-group">
+                    <label>Phone Number* (Without Country Code)</label>
+                    <input type="tel" id="cust-phone" placeholder="e.g. 9876543210" required>
+                </div>
+
                 <div class="checkout-group">
                     <label>City / State</label>
                     <input type="text" id="cust-city" placeholder="e.g. Hyderabad">
@@ -204,7 +226,6 @@
         // --- 1. CALCULATOR LOGIC ---
         const prices = { 'diet': 800, 'weightloss': 1200, 'strength': 1200, 'dmt': 1200, 'freestyle': 1200, 'cardio': 1200, 'yoga': 1200 };
         const serviceNames = { 'diet': "Diet Plan", 'weightloss': "Weight Loss", 'strength': "Strength Training", 'dmt': "DMT Functional", 'freestyle': "Freestyle", 'cardio': "Cardio", 'yoga': "Yoga" };
-
         let currentDuration = 1;
 
         window.onload = function() {
@@ -242,10 +263,8 @@
                 const key = box.value;
                 const price = prices[key];
                 subtotal += price;
-
                 if (key === 'diet') hasDiet = true;
                 else trainingCount++;
-
                 selectedListHTML += `<div style="display:flex; justify-content:space-between;"><span>${serviceNames[key]}</span><span>₹${price}</span></div>`;
             });
 
@@ -257,12 +276,10 @@
 
             let monthlyDiscounted = subtotal - bundleDiscount;
             let finalPrice = monthlyDiscounted * currentDuration;
-
             if (currentDuration === 3) finalPrice = finalPrice * 0.90; 
             else if (currentDuration === 6) finalPrice = finalPrice * 0.80; 
 
             finalPrice = Math.round(finalPrice);
-
             document.getElementById('selected-items-list').innerHTML = selectedListHTML;
             document.getElementById('subtotal-display').innerText = `₹${subtotal}`;
             
@@ -282,13 +299,10 @@
         function openCheckoutForm() {
             const priceText = document.getElementById('final-total').innerText;
             const amount = parseInt(priceText.replace(/[^0-9]/g, ''));
-            
-            // Check if amount is valid before showing form
             if (amount === 0 || isNaN(amount)) {
                 alert("Please select a plan first!");
                 return;
             }
-            // Show the popup
             document.getElementById('checkout-overlay').style.display = 'flex';
         }
 
@@ -306,35 +320,37 @@
             var name = document.getElementById('cust-name').value;
             var email = document.getElementById('cust-email').value;
             var phone = document.getElementById('cust-phone').value;
+            var countryCode = document.getElementById('cust-country-code').value;
 
             if(name === "" || email === "" || phone === "") {
                 alert("Please fill in Name, Email, and Phone to receive your invoice.");
                 return;
             }
 
-            // B. GET PRICE
+            // B. COMBINE COUNTRY CODE + PHONE
+            // Example: Code "+1" and Phone "5551234" becomes "+15551234"
+            var fullPhoneNumber = countryCode + phone;
+
+            // C. GET PRICE
             var priceText = document.getElementById('final-total').innerText;
             var finalAmount = parseInt(priceText.replace(/[^0-9]/g, '')) * 100; 
 
-            // C. RAZORPAY CONFIG
+            // D. RAZORPAY CONFIG
             var options = {
-                "key": "rzp_live_S52p85PQGEDjTh", // ✅ YOUR LIVE KEY
+                "key": "rzp_live_S52p85PQGEDjTh", // ✅ LIVE KEY
                 "amount": finalAmount, 
                 "currency": "INR",
                 "name": "SK Elite Fitness",
                 "description": "Fitness Transformation Plan",
                 "image": "https://cdn-icons-png.flaticon.com/512/2964/2964514.png", 
                 "handler": function (response){
-                    // SUCCESS
-                    closeCheckoutForm(); // Close the form
+                    closeCheckoutForm();
                     alert("✅ Payment Successful! Receipt sent to " + email);
-                    // Optional: Redirect to WhatsApp
                 },
                 "prefill": {
-                    // ✅ This passes the form data to Razorpay for the Invoice!
                     "name": name, 
                     "email": email,
-                    "contact": phone
+                    "contact": fullPhoneNumber // Sending the full international number
                 },
                 "theme": {
                     "color": "#D32F2F"
@@ -347,7 +363,6 @@
             };
 
             var rzp1 = new Razorpay(options);
-            
             rzp1.on('payment.failed', function (response){
                 alert("Transaction Cancelled."); 
             });
