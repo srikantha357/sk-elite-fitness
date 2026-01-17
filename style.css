@@ -523,3 +523,27 @@ footer {
     cursor: pointer;
     margin-top: 15px;
 }
+/* --- FORCE 3-COLUMN GRID LAYOUT --- */
+.training-grid-section .container {
+    display: grid;
+    /* This command forces exactly 3 items per row */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto; /* Centers the grid */
+    padding-bottom: 50px;
+}
+
+/* On Tablet (iPad) -> Show 2 per row */
+@media (max-width: 900px) {
+    .training-grid-section .container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* On Phone -> Show 1 per row (Stacked) */
+@media (max-width: 600px) {
+    .training-grid-section .container {
+        grid-template-columns: 1fr;
+    }
+}
