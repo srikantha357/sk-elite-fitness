@@ -161,3 +161,70 @@ footer {
     margin: 0 15px;
     text-decoration: none;
 }
+/* --- TRAIN PAGE GRID STYLES --- */
+
+/* Page Header */
+.page-header {
+    background-color: #111;
+    color: white;
+    text-align: center;
+    padding: 120px 20px 60px 20px;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    color: #D32F2F; /* Red Brand Color */
+    margin-bottom: 10px;
+}
+
+/* Grid Layout */
+.training-grid-section {
+    padding: 50px 5%;
+    background-color: #f4f4f4;
+}
+
+.training-grid-section .container {
+    display: grid;
+    /* This makes it responsive: 3 columns on PC, 1 on Mobile */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+/* Card Styling */
+.training-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.training-card:hover {
+    transform: translateY(-5px); /* Lift effect */
+}
+
+.card-image {
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    background-color: #ccc; /* Grey placeholder if image loads slow */
+}
+
+.card-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.card-content h3 {
+    margin-bottom: 10px;
+    color: #222;
+}
+
+.text-link {
+    display: inline-block;
+    margin-top: 15px;
+    color: #D32F2F;
+    font-weight: bold;
+    text-decoration: none;
+}
