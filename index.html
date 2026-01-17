@@ -3,96 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK Elite Fitness | Professional Online Coaching</title>
+    <title>SK Elite Fitness | Transform Your Body</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-   /* --- HOMEPAGE SIZE UPGRADES --- */
+    <nav class="navbar">
+        <a href="index.html" class="logo">SK ELITE FITNESS</a>
+        <ul class="nav-links">
+            <li><a href="train.html">Train With Me</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="#footer">Contact</a></li> <li><a href="cart.html"><i class="fas fa-shopping-cart"></i></a></li>
+        </ul>
+        <div class="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
 
-/* 1. BIGGER LOGO */
-.logo {
-    font-size: 2.2rem !important; /* Much bigger Brand Name */
-    font-weight: 900;
-    letter-spacing: 2px;
-}
-
-/* 2. BIGGER NAV LINKS (Train, Services, Contact) */
-.nav-links a {
-    font-size: 1.2rem !important; /* Larger menu text */
-    font-weight: bold;
-    text-transform: uppercase;
-    margin: 0 25px; /* More space between links */
-}
-
-/* 3. HUGE HERO TITLE ("TRANSFORM YOUR BODY") */
-.hero-content h1 {
-    font-size: 5rem !important; /* Massive Title */
-    letter-spacing: 5px;
-    text-shadow: 2px 2px 15px rgba(0,0,0,0.8);
-    margin-bottom: 20px;
-}
-
-/* 4. BIGGER SUBTITLE (Strength - Cardio...) */
-.hero-content p {
-    font-size: 2rem !important; /* Bigger subtitle */
-    margin-bottom: 40px;
-    font-weight: 500;
-    text-transform: uppercase;
-    background: rgba(0,0,0,0.3); /* Slight dark background to make it readable */
-    display: inline-block;
-    padding: 5px 15px;
-}
-
-/* 5. BIGGER "JOIN NOW" BUTTON */
-.cta-button {
-    padding: 20px 60px !important; /* Bigger button area */
-    font-size: 1.5rem !important; /* Bigger text inside button */
-    border-radius: 50px; /* Rounded pill shape looks more elite */
-    letter-spacing: 2px;
-}
-
-/* RESPONSIVE: Keep it readable on Mobile */
-@media (max-width: 768px) {
-    .logo { font-size: 1.5rem !important; }
-    .hero-content h1 { font-size: 3rem !important; }
-    .hero-content p { font-size: 1.2rem !important; }
-    .cta-button { padding: 15px 40px !important; font-size: 1.2rem !important; }
-}
+    <header class="hero-section">
+        <div class="hero-slider">
+            <div class="slide active" style="background-image: url('images/slide1.jpg');"></div>
+            <div class="slide" style="background-image: url('images/slide2.jpg');"></div>
+            <div class="slide" style="background-image: url('images/slide3.jpg');"></div>
+        </div>
+        
+        <div class="hero-content">
+            <h1>TRANSFORM YOUR BODY</h1>
+            <p>Strength - Cardio - DMT - Freestyle</p>
+            <a href="services.html" class="cta-button">JOIN NOW</a>
+        </div>
+    </header>
 
     <section class="insta-bar">
-        <div class="insta-content">
-            <p>Follow the journey on Instagram for daily tips</p>
-            <a href="https://instagram.com/yourhandle" target="_blank" class="insta-btn">
-                <i class="fab fa-instagram"></i> @sk_elitefitness
-            </a>
-        </div>
+        <h2>FOLLOW THE JOURNEY</h2>
+        <p>Daily tips, motivation, and transformation stories.</p>
+        <a href="https://instagram.com/sk_elitefitness" target="_blank" class="insta-btn">
+            <i class="fab fa-instagram"></i> @sk_elitefitness
+        </a>
     </section>
 
-    <section class="hero-story">
-        <div class="container">
-            <h2>MY STORY</h2>
-            <div class="video-wrapper">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/your-video-id" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <footer id="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="services.html">Services</a>
+                <a href="membership.html">Policies</a>
+                <a href="membership.html">Terms</a>
             </div>
-            <p>Making fitness available to everyone. From strength training to freestyle, we build elite physiques.</p>
-        </div>
-    </section>
-
-    <footer>
-        <div class="footer-links">
-            <a href="about.html">About Us</a>
-            <a href="membership.html">Membership</a>
-            <a href="policies.html">Policies</a>
-            <a href="terms.html">Terms & Conditions</a>
-        </div>
-        <div class="copyright">
-            &copy; 2026 SK Elite Fitness. All Rights Reserved.
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            <div class="copyright">&copy; 2026 SK Elite Fitness. All Rights Reserved.</div>
         </div>
     </footer>
-    
 
-    <script src="script.js"></script>
+    <script>
+        // Mobile Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Hero Slider Logic
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        // Change image every 5 seconds
+        setInterval(nextSlide, 5000);
+    </script>
+
 </body>
 </html>
