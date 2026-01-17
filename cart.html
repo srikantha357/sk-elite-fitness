@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart | SK Elite Fitness</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
 
+    <nav class="navbar">
+        <a href="index.html" class="logo">SK ELITE FITNESS</a>
+        <ul class="nav-links">
+            <li><a href="train.html">Train With Me</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="membership.html">Membership</a></li>
+            <li><a href="cart.html" class="active-page"><i class="fas fa-shopping-cart"></i></a></li>
+        </ul>
+        <div class="hamburger"><i class="fas fa-bars"></i></div>
+    </nav>
+
+    <header class="page-header">
+        <h1>YOUR CART</h1>
+        <p>Review your plan before checkout.</p>
+    </header>
+
+    <section class="cart-section">
+        <div class="container">
+            
+            <div id="cart-content" class="cart-box">
+                <p>Your cart is empty.</p>
+                <a href="membership.html" class="cta-button">Go to Membership</a>
+            </div>
+
+            <div id="checkout-form" class="checkout-form" style="display:none;">
+                <h2>Billing Details</h2>
+                <input type="text" id="name" placeholder="Full Name" required>
+                <input type="email" id="email" placeholder="Email Address" required>
+                <input type="tel" id="phone" placeholder="Phone Number" required>
+                
+                <button onclick="checkoutWhatsApp()" class="whatsapp-btn">
+                    <i class="fab fa-whatsapp"></i> PROCEED TO PAY ON WHATSAPP
+                </button>
+                <p class="secure-note"><i class="fas fa-lock"></i> Secure Checkout</p>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="copyright">&copy; 2026 SK Elite Fitness.</div>
+    </footer>
+
+    <script>
+        // 1. Retrieve the Order
+        const savedOrder = localStorage.getItem('fitnessOrder');
+        const cartBox = document.getElementById('cart-content');
+        const formBox = document.getElementById('checkout-form');
+
+        if(savedOrder) {
+            const order = JSON.parse(savedOrder);
+            
+            // 2. Display the Order nicely
+            cartBox.innerHTML = `
+                <div class="order-summary">
+                    <h3>Selected Plan: ${order.plan}</h3>
+                    <ul class="service-list">
+                        ${order.services.map(s => `<li><i class="fas fa-check"></i> ${s}</li>`).join('')}
+                    </ul>
+                    <hr>
+                    <div class="cart-total">
+                        <span>Total to Pay:</span>
+                        <span>${order.total}</span>
+                    </div>
+                    <button onclick="clearCart()" class="remove-btn">Remove / Clear</button>
+                </div>
+            `;
+            // Show the form
+            formBox.style.display = 'block';
+        }
+
+        function clearCart() {
+            localStorage.removeItem('fitnessOrder');
+            location.reload();
+        }
+
+        function checkoutWhatsApp() {
+            const name = document.getElementById('name').value;
+            if(!name) { alert("Please enter your name"); return; }
+            
+            const order = JSON.parse(savedOrder);
+            
+            // Create a WhatsApp Message
+            // Change "919999999999" to YOUR WhatsApp Number
+            const myNumber = "919999999999"; 
+            
+            const msg = `Hello SK Elite Fitness!%0A%0AI want to buy:%0A- Plan: ${order.plan}%0A- Services: ${order.services.join(', ')}%0A- Total Price: ${order.total}%0A%0AMy Name: ${name}`;
+            
+            window.open(`https://wa.me/${myNumber}?text=${msg}`, '_blank');
+        }
+    </script>
+
+</body>
+</html>
