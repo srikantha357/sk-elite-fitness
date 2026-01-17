@@ -570,3 +570,75 @@ footer {
         grid-template-columns: 1fr !important;
     }
 }
+/* --- FINAL POLISH: BIG CARDS, BIG TEXT, VISIBLE FOOTER --- */
+
+/* 1. Make the "TRAIN WITH ME" Title Huge */
+.page-header h1 {
+    font-size: 4rem !important; /* Much bigger title */
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+/* 2. Make the Grid Wider (Cards fill the screen) */
+.training-grid-section .container {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 40px; /* Nice gap between cards */
+    max-width: 95% !important; /* Uses 95% of screen width */
+    margin: 0 auto;
+    padding-bottom: 80px; /* Space before footer */
+}
+
+/* 3. Make Card Text Bigger */
+.card-content h3 {
+    font-size: 1.8rem !important; /* Bigger card titles */
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.card-content p {
+    font-size: 1.2rem !important; /* Bigger description text */
+    line-height: 1.6;
+}
+
+/* 4. Fix Footer Visibility */
+footer {
+    background-color: #111 !important;
+    color: white !important;
+    padding: 60px 20px;
+    text-align: center;
+    border-top: 5px solid #D32F2F; /* Red line to separate footer */
+    position: relative;
+    z-index: 10;
+    margin-top: 50px;
+}
+
+.footer-links {
+    margin-bottom: 20px;
+}
+
+.footer-links a {
+    color: white !important;
+    font-size: 1.2rem; /* Bigger footer links */
+    margin: 0 20px;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.copyright {
+    font-size: 1rem;
+    color: #bbb;
+}
+
+/* RESPONSIVE: Keep mobile looking good */
+@media (max-width: 1200px) {
+    .page-header h1 { font-size: 3rem !important; }
+    .training-grid-section .container { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 768px) {
+    .page-header h1 { font-size: 2.5rem !important; }
+    .training-grid-section .container { grid-template-columns: 1fr !important; }
+}
