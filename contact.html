@@ -65,13 +65,54 @@
                     <div class="input-group">
                         <label>Select Country*</label>
                         <select id="countrySelector" onchange="updateCountryCode()" style="width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 5px;">
-                            <option value="+91">India (+91)</option>
+                            <option value="+91" selected>India (+91)</option>
                             <option value="+1">USA / Canada (+1)</option>
                             <option value="+44">UK (+44)</option>
                             <option value="+971">UAE (+971)</option>
                             <option value="+61">Australia (+61)</option>
-                            <option value="+65">Singapore (+65)</option>
+                            <option value="+93">Afghanistan (+93)</option>
+                            <option value="+355">Albania (+355)</option>
+                            <option value="+213">Algeria (+213)</option>
+                            <option value="+54">Argentina (+54)</option>
+                            <option value="+43">Austria (+43)</option>
+                            <option value="+973">Bahrain (+973)</option>
+                            <option value="+880">Bangladesh (+880)</option>
+                            <option value="+32">Belgium (+32)</option>
+                            <option value="+55">Brazil (+55)</option>
+                            <option value="+86">China (+86)</option>
+                            <option value="+20">Egypt (+20)</option>
+                            <option value="+33">France (+33)</option>
                             <option value="+49">Germany (+49)</option>
+                            <option value="+30">Greece (+30)</option>
+                            <option value="+852">Hong Kong (+852)</option>
+                            <option value="+62">Indonesia (+62)</option>
+                            <option value="+353">Ireland (+353)</option>
+                            <option value="+39">Italy (+39)</option>
+                            <option value="+81">Japan (+81)</option>
+                            <option value="+965">Kuwait (+965)</option>
+                            <option value="+60">Malaysia (+60)</option>
+                            <option value="+52">Mexico (+52)</option>
+                            <option value="+977">Nepal (+977)</option>
+                            <option value="+31">Netherlands (+31)</option>
+                            <option value="+64">New Zealand (+64)</option>
+                            <option value="+968">Oman (+968)</option>
+                            <option value="+92">Pakistan (+92)</option>
+                            <option value="+63">Philippines (+63)</option>
+                            <option value="+48">Poland (+48)</option>
+                            <option value="+351">Portugal (+351)</option>
+                            <option value="+974">Qatar (+974)</option>
+                            <option value="+7">Russia (+7)</option>
+                            <option value="+966">Saudi Arabia (+966)</option>
+                            <option value="+65">Singapore (+65)</option>
+                            <option value="+27">South Africa (+27)</option>
+                            <option value="+82">South Korea (+82)</option>
+                            <option value="+34">Spain (+34)</option>
+                            <option value="+94">Sri Lanka (+94)</option>
+                            <option value="+46">Sweden (+46)</option>
+                            <option value="+41">Switzerland (+41)</option>
+                            <option value="+66">Thailand (+66)</option>
+                            <option value="+90">Turkey (+90)</option>
+                            <option value="+84">Vietnam (+84)</option>
                             <option value="">Other</option>
                         </select>
                     </div>
@@ -108,4 +149,107 @@
     </section>
 
     <footer>
-        <div class="copyright
+        <div class="copyright">&copy; 2026 SK Elite Fitness. All Rights Reserved.</div>
+    </footer>
+
+    <div id="success-popup" class="popup-overlay">
+        <div class="popup-content">
+            <i class="fas fa-check-circle"></i>
+            <h2>Awesome!</h2>
+            <p>Your details have been sent successfully. We will contact you shortly.</p>
+            <button onclick="closePopup()">OK, GREAT</button>
+        </div>
+    </div>
+
+    <a href="https://wa.me/919635493218" class="float-whatsapp" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // 1. Mobile Menu Logic
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        if(hamburger) {
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+
+        // 2. Auto-Update Phone Code Logic
+        function updateCountryCode() {
+            const countrySelect = document.getElementById('countrySelector');
+            const phoneInput = document.getElementById('phoneNumber');
+            // Update the input value to the selected country code
+            phoneInput.value = countrySelect.value + " ";
+        }
+
+        // 3. Form Submission with VALIDATION
+        const form = document.getElementById("contactForm");
+        
+        async function handleSubmit(event) {
+            event.preventDefault();
+            
+            // --- VALIDATION START ---
+            const phoneInput = document.getElementById('phoneNumber').value.trim();
+            // Count actual digits (remove spaces, +, -)
+            const cleanNumber = phoneInput.replace(/[^0-9]/g, '');
+
+            // Rule: Must be at least 10 digits
+            if (cleanNumber.length < 10) {
+                alert("❌ Invalid Phone Number\nPlease enter a valid mobile number with at least 10 digits.");
+                return; // STOP HERE. Do not send form.
+            }
+            // --- VALIDATION END ---
+
+            const status = document.getElementById("status-text");
+            const btn = document.getElementById("submitBtn");
+            const data = new FormData(event.target);
+            
+            // Show loading state
+            btn.innerText = "SENDING...";
+            btn.style.opacity = "0.7";
+            btn.disabled = true;
+
+            fetch(event.target.action, {
+                method: form.method,
+                body: data,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    // SUCCESS: Show the popup & Reset form
+                    document.getElementById('success-popup').style.display = 'flex';
+                    form.reset();
+                    // Reset phone back to default +91
+                    document.getElementById('phoneNumber').value = "+91 ";
+                    document.getElementById('countrySelector').value = "+91";
+                    
+                    btn.innerText = "SEND ENQUIRY";
+                    btn.style.opacity = "1";
+                    btn.disabled = false;
+                    status.innerHTML = "";
+                } else {
+                    response.json().then(data => {
+                        if (Object.hasOwn(data, 'errors')) {
+                            status.innerHTML = data["errors"].map(error => error["message"]).join(", ");
+                        } else {
+                            status.innerHTML = "Oops! There was a problem sending your form";
+                        }
+                    })
+                }
+            }).catch(error => {
+                status.innerHTML = "Oops! There was a problem sending your form";
+                btn.innerText = "SEND ENQUIRY";
+                btn.disabled = false;
+            });
+        }
+        form.addEventListener("submit", handleSubmit);
+
+        function closePopup() {
+            document.getElementById('success-popup').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
