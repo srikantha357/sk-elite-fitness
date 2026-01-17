@@ -320,6 +320,7 @@ footer {
     padding: 60px 20px;
     text-align: center;
     margin-top: 50px;
+    border-top: 5px solid #D32F2F; /* This is the red line you wanted back */
 }
 .footer-links a {
     color: white;
