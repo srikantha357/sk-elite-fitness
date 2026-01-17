@@ -61,7 +61,7 @@
     </footer>
 
     <script>
-        // Mobile Menu Toggle
+        // 1. Mobile Menu Logic
         const hamburger = document.querySelector('.hamburger');
         const navLinks = document.querySelector('.nav-links');
 
@@ -69,19 +69,23 @@
             navLinks.classList.toggle('active');
         });
 
-        // Hero Slider Logic
+        // 2. Hero Slider Logic
         const slides = document.querySelectorAll('.slide');
         let currentSlide = 0;
 
         function nextSlide() {
+            // Remove 'active' from current slide
             slides[currentSlide].classList.remove('active');
+            // Calculate next slide
             currentSlide = (currentSlide + 1) % slides.length;
+            // Add 'active' to new slide
             slides[currentSlide].classList.add('active');
         }
 
         // Change image every 5 seconds
-        setInterval(nextSlide, 5000);
+        if(slides.length > 0) {
+            setInterval(nextSlide, 5000);
+        }
     </script>
-
 </body>
 </html>
