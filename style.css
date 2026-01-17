@@ -547,3 +547,26 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+/* --- FORCE 3 CARDS PER ROW (Desktop) --- */
+.training-grid-section .container {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important; /* Forces 3 columns */
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 50px;
+}
+
+/* Tablet (2 Cards) */
+@media (max-width: 1000px) {
+    .training-grid-section .container {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* Mobile (1 Card) */
+@media (max-width: 600px) {
+    .training-grid-section .container {
+        grid-template-columns: 1fr !important;
+    }
+}
