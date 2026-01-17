@@ -22,52 +22,31 @@
 
     <header class="page-header">
         <h1>BUILD YOUR PACKAGE</h1>
-        <p>Combine plans for maximum results. Diet is included by default.</p>
+        <p>Add Diet or Multiple Trainings to unlock massive discounts.</p>
     </header>
 
     <section class="services-container" style="padding: 50px 5%; display: flex; flex-wrap: wrap; gap: 40px; justify-content: center;">
         
         <div class="plan-selector" style="flex: 1; min-width: 300px;">
             <h2>1. Select Services</h2>
-            <p style="color:#666; font-size: 0.9rem; margin-bottom: 20px;">Tick multiple boxes to customize your training.</p>
+            <p style="color:#666; font-size: 0.9rem; margin-bottom: 20px;">
+                <i class="fas fa-tag" style="color:#D32F2F;"></i> Add Diet to save ₹500 immediately!
+            </p>
             
             <form id="calculatorForm">
                 
-                <label class="service-check" style="background-color: #f9f9f9; border-left: 5px solid #D32F2F;">
-                    <input type="checkbox" name="service" value="diet" checked disabled>
+                <label class="service-check" style="background-color: #fff8f8; border-left: 5px solid #D32F2F;">
+                    <input type="checkbox" name="service" value="diet" checked onchange="calculateTotal()">
                     Diet & Nutrition Plan <span style="float:right; color:#D32F2F; font-weight:bold;">₹800/mo</span>
-                    <br><span style="font-size:0.8rem; color:#888; margin-left: 28px;">(Required Base Plan)</span>
+                    <br><span style="font-size:0.8rem; color:#888; margin-left: 28px;">(Recommended for results)</span>
                 </label>
 
-                <label class="service-check">
-                    <input type="checkbox" name="service" value="weightloss" onchange="calculateTotal()">
-                    Weight Loss Training <span style="float:right; color:#333;">₹1200/mo</span>
-                </label>
-
-                <label class="service-check">
-                    <input type="checkbox" name="service" value="strength" onchange="calculateTotal()">
-                    Strength Training <span style="float:right; color:#333;">₹1200/mo</span>
-                </label>
-
-                <label class="service-check">
-                    <input type="checkbox" name="service" value="dmt" onchange="calculateTotal()">
-                    DMT Functional <span style="float:right; color:#333;">₹1200/mo</span>
-                </label>
-
-                <label class="service-check">
-                    <input type="checkbox" name="service" value="freestyle" onchange="calculateTotal()">
-                    Freestyle Training <span style="float:right; color:#333;">₹1200/mo</span>
-                </label>
-
-                <label class="service-check">
-                    <input type="checkbox" name="service" value="cardio" onchange="calculateTotal()">
-                    Cardio Endurance <span style="float:right; color:#333;">₹1200/mo</span>
-                </label>
-
-                <label class="service-check">
-                    <input type="checkbox" name="service" value="yoga" onchange="calculateTotal()">
-                    Yoga & Mobility <span style="float:right; color:#333;">₹1200/mo</span>
-                </label>
+                <label class="service-check"><input type="checkbox" name="service" value="weightloss" onchange="calculateTotal()"> Weight Loss Training <span style="float:right;">₹1200/mo</span></label>
+                <label class="service-check"><input type="checkbox" name="service" value="strength" onchange="calculateTotal()"> Strength Training <span style="float:right;">₹1200/mo</span></label>
+                <label class="service-check"><input type="checkbox" name="service" value="dmt" onchange="calculateTotal()"> DMT Functional <span style="float:right;">₹1200/mo</span></label>
+                <label class="service-check"><input type="checkbox" name="service" value="freestyle" onchange="calculateTotal()"> Freestyle Training <span style="float:right;">₹1200/mo</span></label>
+                <label class="service-check"><input type="checkbox" name="service" value="cardio" onchange="calculateTotal()"> Cardio Endurance <span style="float:right;">₹1200/mo</span></label>
+                <label class="service-check"><input type="checkbox" name="service" value="yoga" onchange="calculateTotal()"> Yoga & Mobility <span style="float:right;">₹1200/mo</span></label>
             </form>
 
             <h2 style="margin-top: 30px;">2. Select Duration</h2>
@@ -87,25 +66,35 @@
             </div>
         </div>
 
-        <div class="checkout-box" style="flex: 0.8; min-width: 300px; background: #1a1a1a; color: white; border: 1px solid #333;">
+        <div class="checkout-box" style="flex: 0.8; min-width: 300px; background: #1a1a1a; color: white; border: 1px solid #333; height: fit-content;">
             <h2 style="border-bottom: 1px solid #444; padding-bottom: 15px; margin-bottom: 20px;">Your Package</h2>
             
-            <div id="selected-items-list" style="margin-bottom: 20px; font-size: 1.1rem; line-height: 1.6;">
+            <div id="selected-items-list" style="margin-bottom: 20px; font-size: 1rem; line-height: 1.6; color:#ccc;">
                 </div>
 
-            <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 1.1rem; color: #ccc;">
+            <hr style="border: 0; border-top: 1px solid #444; margin: 15px 0;">
+
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 1.1rem;">
+                <span>Subtotal (Monthly)</span>
+                <span id="subtotal-price">₹0</span>
+            </div>
+
+            <div id="discount-row" style="display: flex; justify-content: space-between; margin-bottom: 10px; color: #25D366; font-weight: bold;">
+                <span>Bundle Savings</span>
+                <span id="discount-amount">- ₹0</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 1.1rem;">
                 <span id="summary-duration">1 Month</span>
                 <span>Duration</span>
             </div>
 
-            <hr style="border: 0; border-top: 1px solid #444; margin: 20px 0;">
-
-            <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 2.5rem; font-weight: bold; color: #D32F2F;">
-                <span>Total</span>
-                <span id="total-price">₹800</span>
+            <div style="background: #222; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #D32F2F;">
+                <span style="display:block; font-size: 0.9rem; color:#aaa; margin-bottom:5px;">Final Total To Pay</span>
+                <span id="total-price" style="font-size: 2.5rem; font-weight: bold; color: white;">₹800</span>
             </div>
 
-            <button onclick="proceedToCheckout()" class="cta-button" style="width: 100%; border: none; cursor: pointer;">PROCEED TO PAY</button>
+            <button onclick="proceedToCheckout()" class="cta-button" style="width: 100%; border: none; cursor: pointer; margin-top: 20px;">PROCEED TO PAY</button>
             <p style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: #888;">Secure Payment via UPI / Bank Transfer</p>
         </div>
 
@@ -117,45 +106,24 @@
 
     <script>
         // 1. DEFINE PRICES
-        const prices = {
-            'diet': 800,
-            'weightloss': 1200,
-            'strength': 1200,
-            'dmt': 1200,
-            'freestyle': 1200,
-            'cardio': 1200,
-            'yoga': 1200
-        };
-
-        const serviceNames = {
-            'diet': "Diet & Nutrition Plan",
-            'weightloss': "Weight Loss Training",
-            'strength': "Strength Training",
-            'dmt': "DMT Functional",
-            'freestyle': "Freestyle Training",
-            'cardio': "Cardio Endurance",
-            'yoga': "Yoga & Mobility"
-        };
+        const prices = { 'diet': 800, 'weightloss': 1200, 'strength': 1200, 'dmt': 1200, 'freestyle': 1200, 'cardio': 1200, 'yoga': 1200 };
+        const serviceNames = { 'diet': "Diet Plan", 'weightloss': "Weight Loss", 'strength': "Strength Training", 'dmt': "DMT Functional", 'freestyle': "Freestyle", 'cardio': "Cardio", 'yoga': "Yoga" };
 
         let currentDuration = 1;
 
-        // 2. ON LOAD: Check URL + Calculate
         window.onload = function() {
-            // Diet is checked by HTML default (disabled/locked)
-            
+            // Check URL parameters
             const urlParams = new URLSearchParams(window.location.search);
             const planFromUrl = urlParams.get('plan');
 
+            // If user clicked a training plan button, select that + Diet (default)
             if (planFromUrl && prices[planFromUrl]) {
-                // If they came from a specific page, check that box too
                 const targetCheckbox = document.querySelector(`input[value="${planFromUrl}"]`);
                 if(targetCheckbox) targetCheckbox.checked = true;
             }
-            
             calculateTotal();
         };
 
-        // 3. DURATION LOGIC
         function setDuration(months) {
             currentDuration = months;
             document.querySelectorAll('.plan-option').forEach(opt => opt.classList.remove('selected'));
@@ -163,64 +131,84 @@
             calculateTotal();
         }
 
-        // 4. CALCULATE TOTAL (Sum of all checked boxes)
         function calculateTotal() {
-            let monthlyTotal = 0;
+            let subtotal = 0;
+            let bundleDiscount = 0;
+            let trainingCount = 0;
+            let hasDiet = false;
             let selectedListHTML = "";
 
-            // Loop through ALL checked boxes (including the disabled Diet one)
+            // 1. Scan Checkboxes
             const checkboxes = document.querySelectorAll('input[name="service"]:checked');
             
-            // If user unhacks the disabled attribute, we ensure Diet is counted anyway? 
-            // Better to rely on the DOM state. Since it's 'checked disabled', it appears in querySelectorAll.
-            
-            // Manual check for Diet if for some reason it's missing (failsafe)
-            const dietBox = document.querySelector('input[value="diet"]');
-            if (!dietBox.checked) dietBox.checked = true; 
-
             checkboxes.forEach(box => {
-                const serviceKey = box.value;
-                const price = prices[serviceKey];
-                monthlyTotal += price;
+                const key = box.value;
+                const price = prices[key];
+                subtotal += price;
 
-                // Add to list
-                selectedListHTML += `<div style="display:flex; justify-content:space-between;">
-                                        <span>${serviceNames[serviceKey]}</span>
-                                        <span>₹${price}</span>
-                                     </div>`;
+                if (key === 'diet') {
+                    hasDiet = true;
+                } else {
+                    trainingCount++;
+                }
+
+                selectedListHTML += `<div style="display:flex; justify-content:space-between;"><span>${serviceNames[key]}</span><span>₹${price}</span></div>`;
             });
 
-            // Apply Duration Math
-            let finalPrice = 0;
-            if (currentDuration === 1) {
-                finalPrice = monthlyTotal;
-            } else if (currentDuration === 3) {
-                finalPrice = (monthlyTotal * 3) * 0.90; // 10% Off
+            // 2. APPLY LOGIC:
+            // Rule A: If Training + Diet => ₹500 Off
+            if (trainingCount >= 1 && hasDiet) {
+                bundleDiscount += 500;
+            }
+
+            // Rule B: If Multiple Trainings => ₹500 Off for each EXTRA training
+            if (trainingCount > 1) {
+                // Example: 2 trainings = 1 extra = 500 off. 3 trainings = 2 extra = 1000 off.
+                const extraTrainings = trainingCount - 1;
+                bundleDiscount += (extraTrainings * 500);
+            }
+
+            // 3. Calculate Monthly Total after Bundle Discount
+            let monthlyDiscounted = subtotal - bundleDiscount;
+
+            // 4. Apply Duration Logic (3 Month / 6 Month)
+            let finalPrice = monthlyDiscounted * currentDuration;
+
+            if (currentDuration === 3) {
+                finalPrice = finalPrice * 0.90; // 10% Extra Off
             } else if (currentDuration === 6) {
-                finalPrice = (monthlyTotal * 6) * 0.80; // 20% Off
+                finalPrice = finalPrice * 0.80; // 20% Extra Off
             }
 
             finalPrice = Math.round(finalPrice);
 
-            // Update UI
+            // 5. Update UI
             document.getElementById('selected-items-list').innerHTML = selectedListHTML;
+            document.getElementById('subtotal-price').innerText = `₹${subtotal}`;
+            
+            // Show/Hide Discount Row
+            const discountRow = document.getElementById('discount-row');
+            if (bundleDiscount > 0) {
+                discountRow.style.display = 'flex';
+                document.getElementById('discount-amount').innerText = `- ₹${bundleDiscount}`;
+            } else {
+                discountRow.style.display = 'none';
+            }
+
             document.getElementById('summary-duration').innerText = `${currentDuration} Months`;
             document.getElementById('total-price').innerText = `₹${finalPrice}`;
         }
 
-        // 5. CHECKOUT
         function proceedToCheckout() {
             const checkboxes = document.querySelectorAll('input[name="service"]:checked');
             let selectedNames = [];
-            checkboxes.forEach(box => {
-                selectedNames.push(serviceNames[box.value]);
-            });
-
+            checkboxes.forEach(box => selectedNames.push(serviceNames[box.value]));
+            
             const total = document.getElementById('total-price').innerText;
+            const savings = document.getElementById('discount-amount').innerText;
             const duration = currentDuration + " Months";
-            const servicesString = selectedNames.join(", ");
 
-            const msg = `Hello SK Elite Fitness!%0A%0AI want to buy a custom package:%0A*Services:* ${servicesString}%0A*Duration:* ${duration}%0A*Total Price:* ${total}%0A%0APlease share payment details.`;
+            const msg = `Hello SK Elite Fitness!%0A%0AI want to buy a package:%0A*Items:* ${selectedNames.join(", ")}%0A*Duration:* ${duration}%0A*Savings Applied:* ${savings}%0A*Final Price:* ${total}%0A%0APlease share payment details.`;
             window.open(`https://wa.me/919635493218?text=${msg}`, '_blank');
         }
     </script>
