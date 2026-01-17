@@ -503,3 +503,8 @@ footer a {
 footer a:hover {
     color: #D32F2F !important;
 }
+/* FORCE REMOVE RED BORDER */
+.hero-content {
+    border: none !important;
+    box-shadow: none !important;
+}
