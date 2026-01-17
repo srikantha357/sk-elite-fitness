@@ -21,49 +21,52 @@
     </nav>
 
     <header class="page-header">
-        <h1>CHOOSE YOUR PLAN</h1>
-        <p>Expert Coaching. Sustainable Results.</p>
+        <h1>BUILD YOUR PACKAGE</h1>
+        <p>Combine plans for maximum results. Diet is included by default.</p>
     </header>
 
     <section class="services-container" style="padding: 50px 5%; display: flex; flex-wrap: wrap; gap: 40px; justify-content: center;">
         
         <div class="plan-selector" style="flex: 1; min-width: 300px;">
-            <h2>1. Select Service</h2>
+            <h2>1. Select Services</h2>
+            <p style="color:#666; font-size: 0.9rem; margin-bottom: 20px;">Tick multiple boxes to customize your training.</p>
+            
             <form id="calculatorForm">
                 
-                <label class="service-check">
-                    <input type="radio" name="service" value="diet" checked onchange="calculateTotal()">
-                    Diet & Nutrition Plan <span style="float:right; color:#D32F2F;">₹800/mo</span>
+                <label class="service-check" style="background-color: #f9f9f9; border-left: 5px solid #D32F2F;">
+                    <input type="checkbox" name="service" value="diet" checked disabled>
+                    Diet & Nutrition Plan <span style="float:right; color:#D32F2F; font-weight:bold;">₹800/mo</span>
+                    <br><span style="font-size:0.8rem; color:#888; margin-left: 28px;">(Required Base Plan)</span>
                 </label>
 
                 <label class="service-check">
-                    <input type="radio" name="service" value="weightloss" onchange="calculateTotal()">
-                    Weight Loss Training <span style="float:right; color:#D32F2F;">₹1200/mo</span>
+                    <input type="checkbox" name="service" value="weightloss" onchange="calculateTotal()">
+                    Weight Loss Training <span style="float:right; color:#333;">₹1200/mo</span>
                 </label>
 
                 <label class="service-check">
-                    <input type="radio" name="service" value="strength" onchange="calculateTotal()">
-                    Strength Training <span style="float:right; color:#D32F2F;">₹1200/mo</span>
+                    <input type="checkbox" name="service" value="strength" onchange="calculateTotal()">
+                    Strength Training <span style="float:right; color:#333;">₹1200/mo</span>
                 </label>
 
                 <label class="service-check">
-                    <input type="radio" name="service" value="dmt" onchange="calculateTotal()">
-                    DMT Functional <span style="float:right; color:#D32F2F;">₹1200/mo</span>
+                    <input type="checkbox" name="service" value="dmt" onchange="calculateTotal()">
+                    DMT Functional <span style="float:right; color:#333;">₹1200/mo</span>
                 </label>
 
                 <label class="service-check">
-                    <input type="radio" name="service" value="freestyle" onchange="calculateTotal()">
-                    Freestyle Training <span style="float:right; color:#D32F2F;">₹1200/mo</span>
+                    <input type="checkbox" name="service" value="freestyle" onchange="calculateTotal()">
+                    Freestyle Training <span style="float:right; color:#333;">₹1200/mo</span>
                 </label>
 
                 <label class="service-check">
-                    <input type="radio" name="service" value="cardio" onchange="calculateTotal()">
-                    Cardio Endurance <span style="float:right; color:#D32F2F;">₹1200/mo</span>
+                    <input type="checkbox" name="service" value="cardio" onchange="calculateTotal()">
+                    Cardio Endurance <span style="float:right; color:#333;">₹1200/mo</span>
                 </label>
 
                 <label class="service-check">
-                    <input type="radio" name="service" value="yoga" onchange="calculateTotal()">
-                    Yoga & Mobility <span style="float:right; color:#D32F2F;">₹1200/mo</span>
+                    <input type="checkbox" name="service" value="yoga" onchange="calculateTotal()">
+                    Yoga & Mobility <span style="float:right; color:#333;">₹1200/mo</span>
                 </label>
             </form>
 
@@ -85,12 +88,10 @@
         </div>
 
         <div class="checkout-box" style="flex: 0.8; min-width: 300px; background: #1a1a1a; color: white; border: 1px solid #333;">
-            <h2 style="border-bottom: 1px solid #444; padding-bottom: 15px; margin-bottom: 20px;">Your Summary</h2>
+            <h2 style="border-bottom: 1px solid #444; padding-bottom: 15px; margin-bottom: 20px;">Your Package</h2>
             
-            <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 1.2rem;">
-                <span id="summary-service">Diet Plan</span>
-                <span id="summary-price">₹800</span>
-            </div>
+            <div id="selected-items-list" style="margin-bottom: 20px; font-size: 1.1rem; line-height: 1.6;">
+                </div>
 
             <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 1.1rem; color: #ccc;">
                 <span id="summary-duration">1 Month</span>
@@ -99,7 +100,7 @@
 
             <hr style="border: 0; border-top: 1px solid #444; margin: 20px 0;">
 
-            <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 2rem; font-weight: bold; color: #D32F2F;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 30px; font-size: 2.5rem; font-weight: bold; color: #D32F2F;">
                 <span>Total</span>
                 <span id="total-price">₹800</span>
             </div>
@@ -138,70 +139,88 @@
 
         let currentDuration = 1;
 
-        // 2. CHECK URL FOR SELECTED PLAN (e.g. ?plan=weightloss)
+        // 2. ON LOAD: Check URL + Calculate
         window.onload = function() {
+            // Diet is checked by HTML default (disabled/locked)
+            
             const urlParams = new URLSearchParams(window.location.search);
             const planFromUrl = urlParams.get('plan');
 
             if (planFromUrl && prices[planFromUrl]) {
-                // If link was clicked, select that specific plan
-                document.querySelector(`input[value="${planFromUrl}"]`).checked = true;
-            } else {
-                // Otherwise, Default to Diet Plan
-                document.querySelector(`input[value="diet"]`).checked = true;
+                // If they came from a specific page, check that box too
+                const targetCheckbox = document.querySelector(`input[value="${planFromUrl}"]`);
+                if(targetCheckbox) targetCheckbox.checked = true;
             }
+            
             calculateTotal();
         };
 
-        // 3. HANDLE DURATION CLICKS
+        // 3. DURATION LOGIC
         function setDuration(months) {
             currentDuration = months;
-            
-            // Highlight the selected box
             document.querySelectorAll('.plan-option').forEach(opt => opt.classList.remove('selected'));
             document.getElementById('opt-' + months).classList.add('selected');
-
             calculateTotal();
         }
 
-        // 4. CALCULATE PRICE
+        // 4. CALCULATE TOTAL (Sum of all checked boxes)
         function calculateTotal() {
-            // Get selected service
-            const selectedRadio = document.querySelector('input[name="service"]:checked');
-            const serviceKey = selectedRadio.value;
-            const basePrice = prices[serviceKey];
+            let monthlyTotal = 0;
+            let selectedListHTML = "";
 
-            // Math Logic (Discounts)
+            // Loop through ALL checked boxes (including the disabled Diet one)
+            const checkboxes = document.querySelectorAll('input[name="service"]:checked');
+            
+            // If user unhacks the disabled attribute, we ensure Diet is counted anyway? 
+            // Better to rely on the DOM state. Since it's 'checked disabled', it appears in querySelectorAll.
+            
+            // Manual check for Diet if for some reason it's missing (failsafe)
+            const dietBox = document.querySelector('input[value="diet"]');
+            if (!dietBox.checked) dietBox.checked = true; 
+
+            checkboxes.forEach(box => {
+                const serviceKey = box.value;
+                const price = prices[serviceKey];
+                monthlyTotal += price;
+
+                // Add to list
+                selectedListHTML += `<div style="display:flex; justify-content:space-between;">
+                                        <span>${serviceNames[serviceKey]}</span>
+                                        <span>₹${price}</span>
+                                     </div>`;
+            });
+
+            // Apply Duration Math
             let finalPrice = 0;
             if (currentDuration === 1) {
-                finalPrice = basePrice;
+                finalPrice = monthlyTotal;
             } else if (currentDuration === 3) {
-                // 3 Months = 3 * Price - 10% Discount
-                finalPrice = (basePrice * 3) * 0.90; 
+                finalPrice = (monthlyTotal * 3) * 0.90; // 10% Off
             } else if (currentDuration === 6) {
-                // 6 Months = 6 * Price - 20% Discount
-                finalPrice = (basePrice * 6) * 0.80; 
+                finalPrice = (monthlyTotal * 6) * 0.80; // 20% Off
             }
 
-            // Round nicely (e.g. 2160 -> 2160)
             finalPrice = Math.round(finalPrice);
 
-            // Update Screen
-            document.getElementById('summary-service').innerText = serviceNames[serviceKey];
-            document.getElementById('summary-price').innerText = `₹${basePrice}/mo`;
+            // Update UI
+            document.getElementById('selected-items-list').innerHTML = selectedListHTML;
             document.getElementById('summary-duration').innerText = `${currentDuration} Months`;
             document.getElementById('total-price').innerText = `₹${finalPrice}`;
         }
 
-        // 5. CHECKOUT (Send to WhatsApp)
+        // 5. CHECKOUT
         function proceedToCheckout() {
-            const selectedRadio = document.querySelector('input[name="service"]:checked');
-            const serviceName = serviceNames[selectedRadio.value];
+            const checkboxes = document.querySelectorAll('input[name="service"]:checked');
+            let selectedNames = [];
+            checkboxes.forEach(box => {
+                selectedNames.push(serviceNames[box.value]);
+            });
+
             const total = document.getElementById('total-price').innerText;
             const duration = currentDuration + " Months";
+            const servicesString = selectedNames.join(", ");
 
-            // Open WhatsApp with pre-filled message
-            const msg = `Hello SK Elite Fitness!%0A%0AI want to buy a plan:%0A*Plan:* ${serviceName}%0A*Duration:* ${duration}%0A*Price:* ${total}%0A%0APlease share payment details.`;
+            const msg = `Hello SK Elite Fitness!%0A%0AI want to buy a custom package:%0A*Services:* ${servicesString}%0A*Duration:* ${duration}%0A*Total Price:* ${total}%0A%0APlease share payment details.`;
             window.open(`https://wa.me/919635493218?text=${msg}`, '_blank');
         }
     </script>
