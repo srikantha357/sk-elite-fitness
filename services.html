@@ -29,8 +29,8 @@
             border: 1px solid #333;
             box-shadow: 0 0 20px rgba(211, 47, 47, 0.3);
             position: relative;
-            max-height: 90vh; /* Prevent it from being too tall on mobile */
-            overflow-y: auto; /* Scroll if needed */
+            max-height: 90vh; 
+            overflow-y: auto; 
         }
 
         .close-modal {
@@ -56,6 +56,30 @@
         }
         .checkout-group input:focus,
         .checkout-group select:focus { border-color: #D32F2F; outline: none; }
+
+        /* Custom Checkbox Style */
+        .terms-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .terms-group input {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+        .terms-group label {
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: #bbb;
+            cursor: pointer;
+        }
+        .terms-group a {
+            color: #D32F2F;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -178,14 +202,8 @@
                         <option value="+44">UK (+44)</option>
                         <option value="+971">UAE (+971)</option>
                         <option value="+61">Australia (+61)</option>
-                        <option value="+93">Afghanistan (+93)</option>
-                        <option value="+355">Albania (+355)</option>
-                        <option value="+49">Germany (+49)</option>
-                        <option value="+65">Singapore (+65)</option>
-                        <option value="+27">South Africa (+27)</option>
-                        <option value="+82">South Korea (+82)</option>
                         <option value="+34">Spain (+34)</option>
-                        <option value="+94">Sri Lanka (+94)</option>
+                        <option value="+65">Singapore (+65)</option>
                         <option value="">Other</option>
                     </select>
                 </div>
@@ -195,9 +213,11 @@
                     <input type="tel" id="cust-phone" placeholder="e.g. 9876543210" required>
                 </div>
 
-                <div class="checkout-group">
-                    <label>City / State</label>
-                    <input type="text" id="cust-city" placeholder="e.g. Hyderabad">
+                <div class="terms-group">
+                    <input type="checkbox" id="terms-check" required>
+                    <label for="terms-check">
+                        I agree to the <a href="terms.html" target="_blank">Terms & Conditions</a> and <a href="policies.html" target="_blank">Refund Policy</a>.
+                    </label>
                 </div>
                 
                 <button type="button" id="final-pay-btn" class="cta-button" style="width: 100%; border: none; padding: 15px; font-size: 1.1rem; margin-top: 10px;">
@@ -208,31 +228,19 @@
     </div>
 
     <footer id="footer" style="background-color: #111; color: white; padding: 40px 20px; text-align: center; border-top: 5px solid #D32F2F;">
-    
-    <div class="footer-links" style="margin-bottom: 20px;">
-        <a href="index.html" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.1rem; font-weight: 500;">Home</a>
-        <a href="services.html" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.1rem; font-weight: 500;">Services</a>
-        <a href="policies.html" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.1rem; font-weight: 500;">Policies</a>
-        <a href="terms.html" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.1rem; font-weight: 500;">Terms</a>
-    </div>
-
-    <div class="social-icons" style="margin-bottom: 20px;">
-        <a href="#" style="color: white; font-size: 1.5rem; margin: 0 12px; text-decoration: none;">
-            <i class="fab fa-facebook-f"></i>
-        </a>
-        <a href="#" style="color: white; font-size: 1.5rem; margin: 0 12px; text-decoration: none;">
-            <i class="fab fa-twitter"></i>
-        </a>
-        <a href="#" style="color: white; font-size: 1.5rem; margin: 0 12px; text-decoration: none;">
-            <i class="fab fa-youtube"></i>
-        </a>
-    </div>
-
-    <div class="copyright" style="color: #bbb; font-size: 0.9rem;">
-        &copy; 2026 SK Elite Fitness. All Rights Reserved.
-    </div>
-
-</footer>
+        <div class="footer-links" style="margin-bottom: 20px;">
+            <a href="index.html" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.1rem; font-weight: 500;">Home</a>
+            <a href="services.html" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.1rem; font-weight: 500;">Services</a>
+            <a href="policies.html" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.1rem; font-weight: 500;">Policies</a>
+            <a href="terms.html" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.1rem; font-weight: 500;">Terms</a>
+        </div>
+        <div class="social-icons" style="margin-bottom: 20px;">
+            <a href="#" style="color: white; font-size: 1.5rem; margin: 0 12px; text-decoration: none;"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" style="color: white; font-size: 1.5rem; margin: 0 12px; text-decoration: none;"><i class="fab fa-twitter"></i></a>
+            <a href="#" style="color: white; font-size: 1.5rem; margin: 0 12px; text-decoration: none;"><i class="fab fa-youtube"></i></a>
+        </div>
+        <div class="copyright" style="color: #bbb; font-size: 0.9rem;">&copy; 2026 SK Elite Fitness. All Rights Reserved.</div>
+    </footer>
 
     <script>
         // --- 1. CALCULATOR LOGIC ---
@@ -328,19 +336,27 @@
         document.getElementById('final-pay-btn').addEventListener('click', function(e) {
             e.preventDefault(); 
 
-            // A. VALIDATE FORM
+            // A. VALIDATE FIELDS
             var name = document.getElementById('cust-name').value;
             var email = document.getElementById('cust-email').value;
             var phone = document.getElementById('cust-phone').value;
             var countryCode = document.getElementById('cust-country-code').value;
+            
+            // CHECK THE BOX
+            var termsChecked = document.getElementById('terms-check').checked;
 
             if(name === "" || email === "" || phone === "") {
                 alert("Please fill in Name, Email, and Phone to receive your invoice.");
                 return;
             }
 
+            // STOP IF TERMS NOT CHECKED
+            if(!termsChecked) {
+                alert("Please read and accept the Terms & Conditions to proceed.");
+                return;
+            }
+
             // B. COMBINE COUNTRY CODE + PHONE
-            // Example: Code "+1" and Phone "5551234" becomes "+15551234"
             var fullPhoneNumber = countryCode + phone;
 
             // C. GET PRICE
@@ -349,7 +365,7 @@
 
             // D. RAZORPAY CONFIG
             var options = {
-                "key": "rzp_live_S52p85PQGEDjTh", // ✅ LIVE KEY
+                "key": "rzp_live_S52p85PQGEDjTh", // ✅ YOUR LIVE KEY
                 "amount": finalAmount, 
                 "currency": "INR",
                 "name": "SK Elite Fitness",
@@ -362,7 +378,7 @@
                 "prefill": {
                     "name": name, 
                     "email": email,
-                    "contact": fullPhoneNumber // Sending the full international number
+                    "contact": fullPhoneNumber 
                 },
                 "theme": {
                     "color": "#D32F2F"
