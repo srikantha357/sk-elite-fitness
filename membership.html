@@ -132,9 +132,26 @@
         }
 
         function addToCart() {
-            alert("Added to cart! (We will build the Cart page next)");
-        }
-    </script>
+            // 1. Gather all the data
+            const duration = document.querySelector('input[name="duration"]:checked').parentNode.querySelector('h3').innerText;
+            const priceText = document.getElementById('final-price').innerText;
+            
+            // Get selected services
+            let services = [];
+            document.querySelectorAll('.service-check input:checked').forEach(box => {
+                services.push(box.parentNode.innerText.trim()); // Saves "Cardio", "DMT", etc.
+            });
 
-</body>
-</html>
+            // 2. Create an order object
+            const order = {
+                plan: duration,
+                services: services,
+                total: priceText
+            };
+
+            // 3. Save to browser memory (LocalStorage)
+            localStorage.setItem('fitnessOrder', JSON.stringify(order));
+
+            // 4. Redirect to Cart Page
+            window.location.href = "cart.html";
+        }
