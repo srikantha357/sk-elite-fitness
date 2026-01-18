@@ -3,170 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coach Admin | SK Elite Fitness</title>
+    <title>AI Coach Dashboard | SK Elite Fitness</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h1 { color: #D32F2F; text-align: center; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; }
+        .container { max-width: 850px; margin: 0 auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h1 { color: #D32F2F; text-align: center; border-bottom: 2px solid #eee; padding-bottom: 15px; }
         
         .input-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        label { display: block; font-weight: 600; color: #333; margin-bottom: 8px; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; }
         
-        button { width: 100%; padding: 15px; background: #D32F2F; color: white; border: none; font-size: 1.1rem; cursor: pointer; border-radius: 5px; margin-top: 10px; }
-        button:hover { background: #b71c1c; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; background: #fafafa; padding: 10px; border-radius: 8px; border: 1px solid #eee; }
+        .checkbox-item { display: flex; align-items: center; gap: 5px; cursor: pointer; }
 
-        #output-area { display: none; margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
-        .plan-box { background: #fafafa; border: 1px solid #ddd; padding: 20px; border-left: 5px solid #D32F2F; white-space: pre-wrap; font-family: monospace; }
-        
-        .action-btns { display: flex; gap: 10px; margin-top: 10px; }
-        .copy-btn { background: #333; }
-        .pdf-btn { background: #007BFF; }
+        .btn-main { width: 100%; padding: 18px; background: linear-gradient(135deg, #10a37f, #0d8c6d); color: white; border: none; font-size: 1.2rem; cursor: pointer; border-radius: 8px; font-weight: bold; margin-top: 20px; box-shadow: 0 4px 15px rgba(16, 163, 127, 0.3); }
+        .btn-main:hover { transform: translateY(-2px); }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>🏋️‍♂️ Coach Plan Generator</h1>
+        <h1>🚀 SK Elite - Auto Pilot</h1>
         
         <div class="input-group">
             <label>Client Name</label>
-            <input type="text" id="cName" placeholder="e.g. Rahul Kumar">
-        </div>
-        
-        <div class="input-group">
-            <label>Target Calories</label>
-            <input type="number" id="cCals" value="1800">
+            <input type="text" id="cName" placeholder="Rahul Sharma">
         </div>
 
         <div class="input-group">
-            <label>Diet Preference</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <label>Calories</label>
+                    <input type="number" id="cCals" value="1800">
+                </div>
+                <div>
+                    <label>Goal</label>
+                    <select id="cGoal">
+                        <option>Fat Loss</option>
+                        <option>Muscle Gain</option>
+                        <option>Wedding Prep</option>
+                        <option>General Fitness</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>⚠️ Medical Issues (AI will adjust diet)</label>
+            <div class="checkbox-group">
+                <label class="checkbox-item"><input type="checkbox" value="Diabetes"> Diabetes</label>
+                <label class="checkbox-item"><input type="checkbox" value="High BP"> High BP</label>
+                <label class="checkbox-item"><input type="checkbox" value="Thyroid"> Thyroid</label>
+                <label class="checkbox-item"><input type="checkbox" value="PCOS"> PCOS</label>
+                <label class="checkbox-item"><input type="checkbox" value="Kidney Issues"> Kidney Issues</label>
+                <label class="checkbox-item"><input type="checkbox" value="None" checked> None</label>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Diet Type</label>
             <select id="cType">
-                <option value="veg">Vegetarian</option>
-                <option value="nonveg">Non-Vegetarian (Chicken/Eggs)</option>
-                <option value="egg">Eggetarian</option>
+                <option>Non-Vegetarian</option>
+                <option>Vegetarian</option>
+                <option>Eggetarian</option>
+                <option>Vegan</option>
             </select>
         </div>
 
-        <button onclick="generatePlan()">⚡ Generate Plan</button>
+        <button class="btn-main" onclick="launchGPT()">
+            <i class="fas fa-magic"></i> Copy Data & Open AI Bot
+        </button>
 
-        <div id="output-area">
-            <h3>✅ Plan Ready!</h3>
-            <div class="plan-box" id="finalPlan"></div>
-            
-            <div class="action-btns">
-                <button class="copy-btn" onclick="copyText()">📋 Copy Text</button>
-                <button class="pdf-btn" onclick="window.print()">🖨️ Save as PDF</button>
-            </div>
-        </div>
+        <p style="text-align:center; color:#666; font-size:0.9rem; margin-top:10px;">
+            1. Click Button (Copies Data).<br>2. GPT Opens.<br>3. Paste (Ctrl+V) & Hit Enter.
+        </p>
+
     </div>
 
     <script>
-        function generatePlan() {
-            const name = document.getElementById('cName').value;
+        function launchGPT() {
+            // 1. Get Data
+            const name = document.getElementById('cName').value || "Client";
             const cals = document.getElementById('cCals').value;
+            const goal = document.getElementById('cGoal').value;
             const type = document.getElementById('cType').value;
             
-            let diet = "";
-            
-            // LOGIC: Simple Template Swapping
-            if(type === 'veg') {
-                diet = `
-BREAKFAST:
-- Oats (50g) with Milk
-- 1 Scoop Whey Protein OR 1 Cup Greek Yogurt
-- Almonds (10g)
+            let conditions = [];
+            document.querySelectorAll('input[type=checkbox]:checked').forEach(box => {
+                if(box.value !== "None") conditions.push(box.value);
+            });
+            const medical = conditions.length ? conditions.join(", ") : "Perfectly Healthy";
 
-LUNCH:
-- Roti (2 pcs) or Rice (150g)
-- Dal / Rajma (1 Bowl)
-- Paneer Bhurji (100g)
-- Green Salad
+            // 2. Format Data Block
+            const dataBlock = `CLIENT DATA FOR PDF GENERATION:
+- Name: ${name}
+- Calories: ${cals}
+- Goal: ${goal}
+- Diet: ${type}
+- Medical Issues: ${medical}
+(Please generate the PDF file now using the Python Code Interpreter.)`;
 
-SNACK:
-- Black Coffee
-- 1 Apple
-
-DINNER:
-- Mixed Vegetable Curry
-- Paneer (50g) or Tofu
-- 1 Roti`;
-            } else if (type === 'nonveg') {
-                diet = `
-BREAKFAST:
-- 3 Whole Eggs (Boiled/Omelet)
-- 2 Slices Brown Bread
-- Black Coffee
-
-LUNCH:
-- Grilled Chicken Breast (150g)
-- Rice (150g)
-- Green Veggies
-
-SNACK:
-- 1 Scoop Whey Protein
-- 1 Banana
-
-DINNER:
-- Fish or Chicken Curry (150g)
-- Salad
-- No Carbs (Light Dinner)`;
-            } else {
-                diet = `
-BREAKFAST:
-- 4 Egg Whites + 2 Whole Eggs
-- Oatmeal (40g)
-
-LUNCH:
-- Soya Chunks Curry
-- Rice / Roti
-- Dal
-
-DINNER:
-- 3 Boiled Eggs
-- Salad
-- Soup`;
-            }
-
-            const finalTemplate = `
-★ SK ELITE FITNESS - CUSTOM PLAN ★
-----------------------------------
-CLIENT: ${name}
-GOAL: Body Transformation
-CALORIE TARGET: ${cals} kcal
-----------------------------------
-
-🥑 YOUR NUTRITION PLAN
-${diet}
-
-----------------------------------
-🏋️‍♂️ YOUR TRAINING SPLIT
-----------------------------------
-Mon: Push (Chest/Shoulders/Triceps)
-Tue: Pull (Back/Biceps)
-Wed: Active Rest (Walk 10k Steps)
-Thu: Legs (Squats/Lunges)
-Fri: Upper Body Mix
-Sat: Cardio + Abs
-Sun: REST & RECOVER
-
-----------------------------------
-🚀 COACH'S NOTES:
-1. Drink 3-4 Liters of water daily.
-2. Send me your weight update every Sunday.
-3. Trust the process!
-`;
-
-            document.getElementById('finalPlan').innerText = finalTemplate;
-            document.getElementById('output-area').style.display = 'block';
-        }
-
-        function copyText() {
-            const text = document.getElementById('finalPlan').innerText;
-            navigator.clipboard.writeText(text);
-            alert("Plan Copied! Now paste it in Email/WhatsApp.");
+            // 3. Copy to Clipboard
+            navigator.clipboard.writeText(dataBlock).then(() => {
+                // 4. Open YOUR Custom GPT
+                const link = "https://chatgpt.com/g/g-696d05909dcc8191a400d4eeee3e7e5d-sk-elite-coach"; 
+                window.open(link, '_blank');
+            });
         }
     </script>
-
 </body>
 </html>
