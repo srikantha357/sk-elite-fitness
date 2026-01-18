@@ -88,6 +88,7 @@
         <a href="index.html" class="logo">SK ELITE FITNESS</a>
         <ul class="nav-links">
             <li><a href="about.html">About</a></li>
+            <li><a href="coaches.html">Coaches</a></li>
             <li><a href="train.html">Train With Me</a></li>
             <li><a href="services.html" class="active-page">Services</a></li>
             <li><a href="contact.html">Contact</a></li>
@@ -342,8 +343,6 @@
             var email = document.getElementById('cust-email').value;
             var phone = document.getElementById('cust-phone').value;
             var countryCode = document.getElementById('cust-country-code').value;
-            
-            // CHECK THE BOX
             var termsChecked = document.getElementById('terms-check').checked;
 
             if(name === "" || email === "" || phone === "") {
@@ -351,45 +350,41 @@
                 return;
             }
 
-            // STOP IF TERMS NOT CHECKED
             if(!termsChecked) {
                 alert("Please read and accept the Terms & Conditions to proceed.");
                 return;
             }
 
-            // B. COMBINE COUNTRY CODE + PHONE
             var fullPhoneNumber = countryCode + phone;
 
-            // C. GET PRICE
+            // B. GET PRICE AND FORCE TO ₹1
             var priceText = document.getElementById('final-total').innerText;
-            var finalAmount = parseInt(priceText.replace(/[^0-9]/g, '')) * 100; 
+            
+            // --- IMPORTANT: FORCE PRICE TO ₹1 (100 paise) FOR TESTING ---
+            var finalAmount = 100; 
+            // -------------------------------------------------------------
 
-            // D. RAZORPAY CONFIG
+            // C. RAZORPAY CONFIG
             var options = {
-                "key": "rzp_live_S52p85PQGEDjTh", // ✅ YOUR LIVE KEY
+                "key": "rzp_live_S52p85PQGEDjTh", 
                 "amount": finalAmount, 
                 "currency": "INR",
                 "name": "SK Elite Fitness",
                 "description": "Fitness Transformation Plan",
                 "image": "https://cdn-icons-png.flaticon.com/512/2964/2964514.png", 
                 "handler": function (response){
-                    // 1. Get the Payment ID from Razorpay
                     var payID = response.razorpay_payment_id;
+                    
+                    // ✅ UPDATED WITH YOUR NEW FORM LINK
+                    var formBaseURL = "https://docs.google.com/forms/d/e/1FAIpQLSd3SijzDNBYY-KA7SfUGHpKgL5PzMnZign7dHYTtZTUsCfdlA/viewform";
+                    
+                    // ✅ UPDATED WITH YOUR NEW FIELD ID
+                    var paymentFieldID = "entry.2015815546"; 
 
-                    // 2. Your Google Form Details
-                    var formBaseURL = "https://docs.google.com/forms/d/e/1FAIpQLSd-4dwW5j79vH0Z4SJQrRdp2rpEC9hTpbN7ZmBsHJBdyT2H5w/viewform";
-                    var paymentFieldID = "entry.1961298312"; 
-
-                    // 3. Create the Magic Auto-Fill Link
                     var autoFillLink = formBaseURL + "?usp=pp_url&" + paymentFieldID + "=" + payID;
 
-                    // 4. Hide the Popup
                     closeCheckoutForm();
-
-                    // 5. Show Success Alert
                     alert("✅ Payment Successful! Payment ID: " + payID + "\n\nClick OK to complete your Registration Form.");
-                    
-                    // 6. Redirect to the Form
                     window.location.href = autoFillLink;
                 },
                 "prefill": {
