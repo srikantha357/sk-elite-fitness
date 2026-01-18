@@ -357,13 +357,10 @@
 
             var fullPhoneNumber = countryCode + phone;
 
-            // B. GET PRICE AND FORCE TO ₹1
+            // B. GET REAL PRICE FROM CALCULATOR
             var priceText = document.getElementById('final-total').innerText;
+            var finalAmount = parseInt(priceText.replace(/[^0-9]/g, '')) * 100; // Converts to Paise
             
-            // --- IMPORTANT: FORCE PRICE TO ₹1 (100 paise) FOR TESTING ---
-            var finalAmount = 100; 
-            // -------------------------------------------------------------
-
             // C. RAZORPAY CONFIG
             var options = {
                 "key": "rzp_live_S52p85PQGEDjTh", 
@@ -375,10 +372,10 @@
                 "handler": function (response){
                     var payID = response.razorpay_payment_id;
                     
-                    // ✅ UPDATED WITH YOUR NEW FORM LINK
+                    // ✅ LIVE FORM LINK (Your New Form)
                     var formBaseURL = "https://docs.google.com/forms/d/e/1FAIpQLSd3SijzDNBYY-KA7SfUGHpKgL5PzMnZign7dHYTtZTUsCfdlA/viewform";
                     
-                    // ✅ UPDATED WITH YOUR NEW FIELD ID
+                    // ✅ LIVE FIELD ID (Your New ID)
                     var paymentFieldID = "entry.2015815546"; 
 
                     var autoFillLink = formBaseURL + "?usp=pp_url&" + paymentFieldID + "=" + payID;
