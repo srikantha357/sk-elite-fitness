@@ -6,12 +6,88 @@
     <title>Services & Pricing | SK Elite Fitness</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        .checkout-overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .checkout-modal {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid #333;
+            box-shadow: 0 0 20px rgba(211, 47, 47, 0.3);
+            position: relative;
+            max-height: 90vh; 
+            overflow-y: auto; 
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 1.5rem;
+            color: #888;
+            cursor: pointer;
+        }
+        .close-modal:hover { color: white; }
+
+        .checkout-group { margin-bottom: 15px; }
+        .checkout-group label { display: block; color: #ccc; margin-bottom: 5px; font-size: 0.9rem; }
+        
+        .checkout-group input, 
+        .checkout-group select {
+            width: 100%;
+            padding: 12px;
+            background: #222;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 5px;
+        }
+        .checkout-group input:focus,
+        .checkout-group select:focus { border-color: #D32F2F; outline: none; }
+
+        /* Custom Checkbox Style */
+        .terms-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .terms-group input {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+        .terms-group label {
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: #bbb;
+            cursor: pointer;
+        }
+        .terms-group a {
+            color: #D32F2F;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 
     <nav class="navbar">
         <a href="index.html" class="logo">SK ELITE FITNESS</a>
         <ul class="nav-links">
+            <li><a href="about.html">About</a></li>
             <li><a href="train.html">Train With Me</a></li>
             <li><a href="services.html" class="active-page">Services</a></li>
             <li><a href="contact.html">Contact</a></li>
@@ -68,8 +144,7 @@
         <div class="summary-box" style="flex: 0.8; min-width: 300px; background: #1a1a1a; color: white; border: 1px solid #333; padding: 25px; border-radius: 8px; height: fit-content;">
             <h3 style="border-bottom: 1px solid #444; padding-bottom: 15px; margin-bottom: 20px; font-size: 1.5rem;">Your Package</h3>
             
-            <div id="selected-items-list" style="margin-bottom: 20px; font-size: 1rem; line-height: 1.6; color:#ccc;">
-                </div>
+            <div id="selected-items-list" style="margin-bottom: 20px; font-size: 1rem; line-height: 1.6; color:#ccc;"></div>
 
             <hr style="border: 0; border-top: 1px solid #444; margin: 15px 0;">
 
@@ -93,52 +168,85 @@
                 <h2 style="font-size: 2.5rem; color: white; margin: 0;">₹<span id="final-total">800</span></h2>
             </div>
 
-            <button id="pay-btn" class="cta-button" style="width: 100%; border: none; margin-top: 20px; font-size: 1.2rem; padding: 15px; cursor: pointer;">
+            <button onclick="openCheckoutForm()" class="cta-button" style="width: 100%; border: none; margin-top: 20px; font-size: 1.2rem; padding: 15px; cursor: pointer;">
                 PROCEED TO PAY
             </button>
             
             <button onclick="resetForm()" style="width: 100%; background: none; border: none; color: #888; text-decoration: underline; margin-top: 15px; cursor: pointer;">
-                Clear / Cancel Selection
+                Clear Selection
             </button>
-
-            <p style="text-align: center; font-size: 0.8rem; color: #666; margin-top: 10px;">
-                Secure Payment via UPI / Credit Card / Debit Card
-            </p>
         </div>
 
     </section>
 
+    <div id="checkout-overlay" class="checkout-overlay">
+        <div class="checkout-modal">
+            <span class="close-modal" onclick="closeCheckoutForm()">&times;</span>
+            <h2 style="color: white; margin-bottom: 5px;">Billing Details</h2>
+            <p style="color: #888; font-size: 0.9rem; margin-bottom: 20px;">We need this to send your invoice & diet plan.</p>
+            
+            <form id="billing-form">
+                <div class="checkout-group">
+                    <label>Full Name*</label>
+                    <input type="text" id="cust-name" placeholder="John Doe" required>
+                </div>
+                <div class="checkout-group">
+                    <label>Email Address* (For Invoice)</label>
+                    <input type="email" id="cust-email" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="checkout-group">
+                    <label>Select Country Code*</label>
+                    <select id="cust-country-code">
+                        <option value="+91" selected>India (+91)</option>
+                        <option value="+1">USA / Canada (+1)</option>
+                        <option value="+44">UK (+44)</option>
+                        <option value="+971">UAE (+971)</option>
+                        <option value="+61">Australia (+61)</option>
+                        <option value="+34">Spain (+34)</option>
+                        <option value="+65">Singapore (+65)</option>
+                        <option value="">Other</option>
+                    </select>
+                </div>
+
+                <div class="checkout-group">
+                    <label>Phone Number* (Without Country Code)</label>
+                    <input type="tel" id="cust-phone" placeholder="e.g. 9876543210" required>
+                </div>
+
+                <div class="terms-group">
+                    <input type="checkbox" id="terms-check" required>
+                    <label for="terms-check">
+                        I agree to the <a href="terms.html" target="_blank">Terms & Conditions</a> and <a href="policies.html" target="_blank">Refund Policy</a>.
+                    </label>
+                </div>
+                
+                <button type="button" id="final-pay-btn" class="cta-button" style="width: 100%; border: none; padding: 15px; font-size: 1.1rem; margin-top: 10px;">
+                    PAY NOW SECURELY
+                </button>
+            </form>
+        </div>
+    </div>
+
     <footer id="footer" style="background-color: #111; color: white; padding: 40px 20px; text-align: center; border-top: 5px solid #D32F2F;">
-        
         <div class="footer-links" style="margin-bottom: 20px;">
             <a href="index.html" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.1rem; font-weight: 500;">Home</a>
             <a href="services.html" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.1rem; font-weight: 500;">Services</a>
-            <a href="#" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.1rem; font-weight: 500;">Policies</a>
-            <a href="#" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.1rem; font-weight: 500;">Terms</a>
+            <a href="policies.html" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.1rem; font-weight: 500;">Policies</a>
+            <a href="terms.html" style="color: white; margin: 0 15px; text-decoration: none; font-size: 1.1rem; font-weight: 500;">Terms</a>
         </div>
-    
         <div class="social-icons" style="margin-bottom: 20px;">
-            <a href="#" style="color: white; font-size: 1.5rem; margin: 0 12px; text-decoration: none;">
-                <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="#" style="color: white; font-size: 1.5rem; margin: 0 12px; text-decoration: none;">
-                <i class="fab fa-twitter"></i>
-            </a>
-            <a href="#" style="color: white; font-size: 1.5rem; margin: 0 12px; text-decoration: none;">
-                <i class="fab fa-youtube"></i>
-            </a>
+            <a href="#" style="color: white; font-size: 1.5rem; margin: 0 12px; text-decoration: none;"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" style="color: white; font-size: 1.5rem; margin: 0 12px; text-decoration: none;"><i class="fab fa-twitter"></i></a>
+            <a href="#" style="color: white; font-size: 1.5rem; margin: 0 12px; text-decoration: none;"><i class="fab fa-youtube"></i></a>
         </div>
-    
-        <div class="copyright" style="color: #bbb; font-size: 0.9rem;">
-            &copy; 2026 SK Elite Fitness. All Rights Reserved.
-        </div>
-    
+        <div class="copyright" style="color: #bbb; font-size: 0.9rem;">&copy; 2026 SK Elite Fitness. All Rights Reserved.</div>
     </footer>
 
     <script>
+        // --- 1. CALCULATOR LOGIC ---
         const prices = { 'diet': 800, 'weightloss': 1200, 'strength': 1200, 'dmt': 1200, 'freestyle': 1200, 'cardio': 1200, 'yoga': 1200 };
         const serviceNames = { 'diet': "Diet Plan", 'weightloss': "Weight Loss", 'strength': "Strength Training", 'dmt': "DMT Functional", 'freestyle': "Freestyle", 'cardio': "Cardio", 'yoga': "Yoga" };
-
         let currentDuration = 1;
 
         window.onload = function() {
@@ -158,11 +266,8 @@
             calculateTotal();
         }
 
-        // RESET FUNCTION (Cancels selection)
         function resetForm() {
             document.querySelectorAll('input[name="service"]').forEach(box => box.checked = false);
-            // Optional: Re-check diet if you want default behavior, or leave all blank
-            // document.querySelector('input[value="diet"]').checked = true; 
             calculateTotal();
         }
 
@@ -179,10 +284,8 @@
                 const key = box.value;
                 const price = prices[key];
                 subtotal += price;
-
                 if (key === 'diet') hasDiet = true;
                 else trainingCount++;
-
                 selectedListHTML += `<div style="display:flex; justify-content:space-between;"><span>${serviceNames[key]}</span><span>₹${price}</span></div>`;
             });
 
@@ -194,12 +297,10 @@
 
             let monthlyDiscounted = subtotal - bundleDiscount;
             let finalPrice = monthlyDiscounted * currentDuration;
-
             if (currentDuration === 3) finalPrice = finalPrice * 0.90; 
             else if (currentDuration === 6) finalPrice = finalPrice * 0.80; 
 
             finalPrice = Math.round(finalPrice);
-
             document.getElementById('selected-items-list').innerHTML = selectedListHTML;
             document.getElementById('subtotal-display').innerText = `₹${subtotal}`;
             
@@ -214,23 +315,56 @@
             document.getElementById('duration-text').innerText = `${currentDuration} Months`;
             document.getElementById('final-total').innerText = finalPrice;
         }
+
+        // --- 2. POPUP FORM LOGIC ---
+        function openCheckoutForm() {
+            const priceText = document.getElementById('final-total').innerText;
+            const amount = parseInt(priceText.replace(/[^0-9]/g, ''));
+            if (amount === 0 || isNaN(amount)) {
+                alert("Please select a plan first!");
+                return;
+            }
+            document.getElementById('checkout-overlay').style.display = 'flex';
+        }
+
+        function closeCheckoutForm() {
+            document.getElementById('checkout-overlay').style.display = 'none';
+        }
     </script>
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
-        document.getElementById('pay-btn').addEventListener('click', function(e) {
+        document.getElementById('final-pay-btn').addEventListener('click', function(e) {
             e.preventDefault(); 
 
-            var priceText = document.getElementById('final-total').innerText;
-            var numericPrice = priceText.replace(/[^0-9]/g, ''); 
+            // A. VALIDATE FIELDS
+            var name = document.getElementById('cust-name').value;
+            var email = document.getElementById('cust-email').value;
+            var phone = document.getElementById('cust-phone').value;
+            var countryCode = document.getElementById('cust-country-code').value;
             
-            var finalAmount = parseInt(numericPrice) * 100; 
+            // CHECK THE BOX
+            var termsChecked = document.getElementById('terms-check').checked;
 
-            if (finalAmount === 0 || isNaN(finalAmount)) {
-                alert("Please select a plan first!");
+            if(name === "" || email === "" || phone === "") {
+                alert("Please fill in Name, Email, and Phone to receive your invoice.");
                 return;
             }
 
+            // STOP IF TERMS NOT CHECKED
+            if(!termsChecked) {
+                alert("Please read and accept the Terms & Conditions to proceed.");
+                return;
+            }
+
+            // B. COMBINE COUNTRY CODE + PHONE
+            var fullPhoneNumber = countryCode + phone;
+
+            // C. GET PRICE
+            var priceText = document.getElementById('final-total').innerText;
+            var finalAmount = parseInt(priceText.replace(/[^0-9]/g, '')) * 100; 
+
+            // D. RAZORPAY CONFIG
             var options = {
                 "key": "rzp_live_S52p85PQGEDjTh", // ✅ YOUR LIVE KEY
                 "amount": finalAmount, 
@@ -239,29 +373,42 @@
                 "description": "Fitness Transformation Plan",
                 "image": "https://cdn-icons-png.flaticon.com/512/2964/2964514.png", 
                 "handler": function (response){
-                    // SUCCESS
-                    alert("✅ Payment Successful! Payment ID: " + response.razorpay_payment_id);
+                    // 1. Get the Payment ID from Razorpay
+                    var payID = response.razorpay_payment_id;
+
+                    // 2. Your Google Form Details
+                    var formBaseURL = "https://docs.google.com/forms/d/e/1FAIpQLSd-4dwW5j79vH0Z4SJQrRdp2rpEC9hTpbN7ZmBsHJBdyT2H5w/viewform";
+                    var paymentFieldID = "entry.1961298312"; 
+
+                    // 3. Create the Magic Auto-Fill Link
+                    var autoFillLink = formBaseURL + "?usp=pp_url&" + paymentFieldID + "=" + payID;
+
+                    // 4. Hide the Popup
+                    closeCheckoutForm();
+
+                    // 5. Show Success Alert
+                    alert("✅ Payment Successful! Payment ID: " + payID + "\n\nClick OK to complete your Registration Form.");
+                    
+                    // 6. Redirect to the Form
+                    window.location.href = autoFillLink;
                 },
                 "prefill": {
-                    "name": "", 
-                    "email": "",
-                    "contact": ""
+                    "name": name, 
+                    "email": email,
+                    "contact": fullPhoneNumber 
                 },
                 "theme": {
                     "color": "#D32F2F"
                 },
                 "modal": {
                     "ondismiss": function(){
-                        // This handles the 'X' click gracefully
                         console.log('Transaction cancelled.');
                     }
                 }
             };
 
             var rzp1 = new Razorpay(options);
-            
             rzp1.on('payment.failed', function (response){
-                // UPDATED: Polite Cancel Message
                 alert("Transaction Cancelled."); 
             });
 
