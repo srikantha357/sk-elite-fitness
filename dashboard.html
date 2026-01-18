@@ -1,1 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Admin | SK Elite Fitness</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { color: #D32F2F; text-align: center; }
+        
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        
+        button { width: 100%; padding: 15px; background: #D32F2F; color: white; border: none; font-size: 1.1rem; cursor: pointer; border-radius: 5px; margin-top: 10px; }
+        button:hover { background: #b71c1c; }
 
+        #output-area { display: none; margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
+        .plan-box { background: #fafafa; border: 1px solid #ddd; padding: 20px; border-left: 5px solid #D32F2F; white-space: pre-wrap; font-family: monospace; }
+        
+        .action-btns { display: flex; gap: 10px; margin-top: 10px; }
+        .copy-btn { background: #333; }
+        .pdf-btn { background: #007BFF; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🏋️‍♂️ Coach Plan Generator</h1>
+        
+        <div class="input-group">
+            <label>Client Name</label>
+            <input type="text" id="cName" placeholder="e.g. Rahul Kumar">
+        </div>
+        
+        <div class="input-group">
+            <label>Target Calories</label>
+            <input type="number" id="cCals" value="1800">
+        </div>
+
+        <div class="input-group">
+            <label>Diet Preference</label>
+            <select id="cType">
+                <option value="veg">Vegetarian</option>
+                <option value="nonveg">Non-Vegetarian (Chicken/Eggs)</option>
+                <option value="egg">Eggetarian</option>
+            </select>
+        </div>
+
+        <button onclick="generatePlan()">⚡ Generate Plan</button>
+
+        <div id="output-area">
+            <h3>✅ Plan Ready!</h3>
+            <div class="plan-box" id="finalPlan"></div>
+            
+            <div class="action-btns">
+                <button class="copy-btn" onclick="copyText()">📋 Copy Text</button>
+                <button class="pdf-btn" onclick="window.print()">🖨️ Save as PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generatePlan() {
+            const name = document.getElementById('cName').value;
+            const cals = document.getElementById('cCals').value;
+            const type = document.getElementById('cType').value;
+            
+            let diet = "";
+            
+            // LOGIC: Simple Template Swapping
+            if(type === 'veg') {
+                diet = `
+BREAKFAST:
+- Oats (50g) with Milk
+- 1 Scoop Whey Protein OR 1 Cup Greek Yogurt
+- Almonds (10g)
+
+LUNCH:
+- Roti (2 pcs) or Rice (150g)
+- Dal / Rajma (1 Bowl)
+- Paneer Bhurji (100g)
+- Green Salad
+
+SNACK:
+- Black Coffee
+- 1 Apple
+
+DINNER:
+- Mixed Vegetable Curry
+- Paneer (50g) or Tofu
+- 1 Roti`;
+            } else if (type === 'nonveg') {
+                diet = `
+BREAKFAST:
+- 3 Whole Eggs (Boiled/Omelet)
+- 2 Slices Brown Bread
+- Black Coffee
+
+LUNCH:
+- Grilled Chicken Breast (150g)
+- Rice (150g)
+- Green Veggies
+
+SNACK:
+- 1 Scoop Whey Protein
+- 1 Banana
+
+DINNER:
+- Fish or Chicken Curry (150g)
+- Salad
+- No Carbs (Light Dinner)`;
+            } else {
+                diet = `
+BREAKFAST:
+- 4 Egg Whites + 2 Whole Eggs
+- Oatmeal (40g)
+
+LUNCH:
+- Soya Chunks Curry
+- Rice / Roti
+- Dal
+
+DINNER:
+- 3 Boiled Eggs
+- Salad
+- Soup`;
+            }
+
+            const finalTemplate = `
+★ SK ELITE FITNESS - CUSTOM PLAN ★
+----------------------------------
+CLIENT: ${name}
+GOAL: Body Transformation
+CALORIE TARGET: ${cals} kcal
+----------------------------------
+
+🥑 YOUR NUTRITION PLAN
+${diet}
+
+----------------------------------
+🏋️‍♂️ YOUR TRAINING SPLIT
+----------------------------------
+Mon: Push (Chest/Shoulders/Triceps)
+Tue: Pull (Back/Biceps)
+Wed: Active Rest (Walk 10k Steps)
+Thu: Legs (Squats/Lunges)
+Fri: Upper Body Mix
+Sat: Cardio + Abs
+Sun: REST & RECOVER
+
+----------------------------------
+🚀 COACH'S NOTES:
+1. Drink 3-4 Liters of water daily.
+2. Send me your weight update every Sunday.
+3. Trust the process!
+`;
+
+            document.getElementById('finalPlan').innerText = finalTemplate;
+            document.getElementById('output-area').style.display = 'block';
+        }
+
+        function copyText() {
+            const text = document.getElementById('finalPlan').innerText;
+            navigator.clipboard.writeText(text);
+            alert("Plan Copied! Now paste it in Email/WhatsApp.");
+        }
+    </script>
+
+</body>
+</html>
