@@ -1,3 +1,13 @@
+<script>
+    // 🔒 SIMPLE PASSWORD PROTECTION
+    var password = prompt("🛑 ADMIN ACCESS ONLY 🛑\nEnter the Coach Password:");
+    
+    // 👇 CHANGE "Coach123" TO YOUR OWN PASSWORD BELOW 👇
+    if (password !== "Coach123") { 
+        alert("❌ Access Denied! Redirecting...");
+        window.location.href = "index.html"; // Kicks them back to Home Page
+    }
+</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
