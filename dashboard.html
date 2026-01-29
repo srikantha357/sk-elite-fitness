@@ -24,6 +24,12 @@
         label { font-weight: 700; display: block; margin-bottom: 8px; color: #333; }
         input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; transition: 0.3s; }
         input:focus, select:focus { border-color: #D32F2F; outline: none; }
+
+        /* BMI BOX STYLE */
+        .bmi-box { background: #e3f2fd; padding: 15px; border-radius: 8px; border-left: 5px solid #2196F3; margin-bottom: 20px; display: none; }
+        .bmi-text { font-size: 1.2rem; font-weight: bold; color: #0d47a1; }
+        .bmi-warning { background: #ffebee; border-left: 5px solid #c62828; }
+        .bmi-warning .bmi-text { color: #c62828; }
         
         .row { display: flex; gap: 15px; }
         .col { flex: 1; }
@@ -77,15 +83,20 @@
         <div class="col">
             <div class="form-group">
                 <label>Height (cm)</label>
-                <input type="number" id="height" placeholder="175">
+                <input type="number" id="height" placeholder="175" oninput="calculateBMI()">
             </div>
         </div>
         <div class="col">
             <div class="form-group">
                 <label>Current Weight (kg)</label>
-                <input type="number" id="weight" placeholder="80">
+                <input type="number" id="weight" placeholder="80" oninput="calculateBMI()">
             </div>
         </div>
+    </div>
+
+    <div id="bmi-result" class="bmi-box">
+        BMI Score: <span id="bmi-score" class="bmi-text">--</span>
+        <br>Status: <span id="bmi-status">--</span>
     </div>
 
     <div class="form-group">
@@ -138,6 +149,37 @@
 </div>
 
 <script>
+    // ✅ 1. THE BMI CALCULATOR FUNCTION
+    function calculateBMI() {
+        let h = document.getElementById('height').value;
+        let w = document.getElementById('weight').value;
+        let box = document.getElementById('bmi-result');
+        
+        if(h > 0 && w > 0) {
+            let heightInMeters = h / 100;
+            let bmi = (w / (heightInMeters * heightInMeters)).toFixed(1);
+            let status = "";
+            let isBad = false;
+
+            if(bmi < 18.5) { status = "Underweight ⚠️"; isBad = true; }
+            else if(bmi < 24.9) { status = "Healthy Weight ✅"; isBad = false; }
+            else if(bmi < 29.9) { status = "Overweight ⚠️"; isBad = true; }
+            else { status = "Obese 🚨"; isBad = true; }
+
+            document.getElementById('bmi-score').innerText = bmi;
+            document.getElementById('bmi-status').innerText = status;
+            
+            // Change color if unhealthy
+            if(isBad) {
+                box.classList.add('bmi-warning');
+            } else {
+                box.classList.remove('bmi-warning');
+            }
+            box.style.display = "block";
+        }
+    }
+
+    // ✅ 2. THE PDF PROMPT GENERATOR
     function generatePrompt() {
         let name = document.getElementById('name').value;
         let gender = document.getElementById('gender').value;
@@ -147,6 +189,7 @@
         let goalWeight = document.getElementById('goalWeight').value;
         let goal = document.getElementById('goal').value;
         let diet = document.getElementById('diet').value;
+        let bmi = document.getElementById('bmi-score').innerText; // Grabs the calculated BMI
         
         let meds = [];
         document.querySelectorAll('.med:checked').forEach((checkbox) => {
@@ -160,8 +203,8 @@ Use Python to generate a PDF file named "SK_Elite_${name.replace(/\s/g, '_')}.pd
 
 🚨 **STRICT FORMATTING RULES:**
 1. **Header:** "SK ELITE FITNESS - DIET & TRAINING PRESCRIPTION"
-2. **Client Stats Box:** Name: ${name} | ${gender} | ${weight}kg -> Target: ${goalWeight}kg
-3. **Goal Analysis:** Plan type: ${goal}.
+2. **Client Stats Box:** Name: ${name} | ${gender} | ${weight}kg | Height: ${height}cm | BMI: ${bmi}
+3. **Goal Analysis:** Plan type: ${goal}. Target Weight: ${goalWeight}kg.
 
 🥗 **DIET TABLE (MUST BE EXACTLY LIKE THIS):**
 Create a table with columns: [ MEAL TIME | FOODSTUFFS (Specific Grams) | MACROS ].
