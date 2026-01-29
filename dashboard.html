@@ -1,126 +1,242 @@
-<script>
-    // 🔒 SIMPLE PASSWORD PROTECTION
-    var password = prompt("🛑 ADMIN ACCESS ONLY 🛑\nEnter the Coach Password:");
-    
-    // 👇 CHANGE "Coach123" TO YOUR OWN PASSWORD BELOW 👇
-    if (password !== "Coach123") { 
-        alert("❌ Access Denied! Redirecting...");
-        window.location.href = "index.html"; // Kicks them back to Home Page
-    }
-</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Coach Dashboard | SK Elite Fitness</title>
+    <title>SK Elite | Coach Dashboard</title>
+    <script>
+        var password = prompt("🛑 ADMIN ACCESS ONLY 🛑\nEnter the Coach Password:");
+        if (password != "Coach123") { 
+            alert("❌ Access Denied! Redirecting...");
+            window.location.href = "index.html"; 
+        }
+    </script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; }
-        .container { max-width: 850px; margin: 0 auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h1 { color: #D32F2F; text-align: center; border-bottom: 2px solid #eee; padding-bottom: 15px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 650px; border-top: 6px solid #D32F2F; }
         
-        .input-group { margin-bottom: 15px; }
-        label { display: block; font-weight: 600; color: #333; margin-bottom: 8px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; }
+        h2 { text-align: center; color: #111; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .subtitle { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 30px; }
         
-        .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; background: #fafafa; padding: 10px; border-radius: 8px; border: 1px solid #eee; }
-        .checkbox-item { display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        .form-group { margin-bottom: 20px; }
+        label { font-weight: 600; display: block; margin-bottom: 8px; color: #333; font-size: 0.95rem; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; transition: 0.3s; }
+        input:focus, select:focus { border-color: #D32F2F; outline: none; }
+        
+        /* BMI Section Styles */
+        .bmi-box { background: #e8f5e9; padding: 15px; border-radius: 8px; border-left: 5px solid #2e7d32; margin-bottom: 20px; display: none; }
+        .bmi-text { font-size: 1.2rem; font-weight: bold; color: #1b5e20; }
+        .bmi-warning { background: #ffebee; border-left: 5px solid #c62828; }
+        .bmi-warning .bmi-text { color: #c62828; }
 
-        .btn-main { width: 100%; padding: 18px; background: linear-gradient(135deg, #10a37f, #0d8c6d); color: white; border: none; font-size: 1.2rem; cursor: pointer; border-radius: 8px; font-weight: bold; margin-top: 20px; box-shadow: 0 4px 15px rgba(16, 163, 127, 0.3); }
-        .btn-main:hover { transform: translateY(-2px); }
+        .row { display: flex; gap: 15px; }
+        .col { flex: 1; }
+
+        .checkbox-group { display: flex; gap: 10px; flex-wrap: wrap; background: #fafafa; padding: 10px; border-radius: 8px; border: 1px solid #eee; }
+        .checkbox-group label { font-weight: normal; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; cursor: pointer; }
+        
+        .btn { width: 100%; padding: 16px; background-color: #D32F2F; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 15px; box-shadow: 0 4px 6px rgba(211, 47, 47, 0.2); }
+        .btn:hover { background-color: #b71c1c; transform: translateY(-2px); }
+        .fa-file-prescription { margin-right: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>🚀 SK Elite - Auto Pilot</h1>
-        
-        <div class="input-group">
-            <label>Client Name</label>
-            <input type="text" id="cName" placeholder="Rahul Sharma">
-        </div>
+<div class="container">
+    <h2>SK Elite Fitness</h2>
+    <p class="subtitle">Client Prescription Generator</p>
 
-        <div class="input-group">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div>
-                    <label>Calories</label>
-                    <input type="number" id="cCals" value="1800">
-                </div>
-                <div>
-                    <label>Goal</label>
-                    <select id="cGoal">
-                        <option>Fat Loss</option>
-                        <option>Muscle Gain</option>
-                        <option>Wedding Prep</option>
-                        <option>General Fitness</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="input-group">
-            <label>⚠️ Medical Issues (AI will adjust diet)</label>
-            <div class="checkbox-group">
-                <label class="checkbox-item"><input type="checkbox" value="Diabetes"> Diabetes</label>
-                <label class="checkbox-item"><input type="checkbox" value="High BP"> High BP</label>
-                <label class="checkbox-item"><input type="checkbox" value="Thyroid"> Thyroid</label>
-                <label class="checkbox-item"><input type="checkbox" value="PCOS"> PCOS</label>
-                <label class="checkbox-item"><input type="checkbox" value="Kidney Issues"> Kidney Issues</label>
-                <label class="checkbox-item"><input type="checkbox" value="None" checked> None</label>
-            </div>
-        </div>
-
-        <div class="input-group">
-            <label>Diet Type</label>
-            <select id="cType">
-                <option>Non-Vegetarian</option>
-                <option>Vegetarian</option>
-                <option>Eggetarian</option>
-                <option>Vegan</option>
-            </select>
-        </div>
-
-        <button class="btn-main" onclick="launchGPT()">
-            <i class="fas fa-magic"></i> Copy Data & Open AI Bot
-        </button>
-
-        <p style="text-align:center; color:#666; font-size:0.9rem; margin-top:10px;">
-            1. Click Button (Copies Data).<br>2. GPT Opens.<br>3. Paste (Ctrl+V) & Hit Enter.
-        </p>
-
+    <div class="form-group">
+        <label>Client Name</label>
+        <input type="text" id="name" placeholder="e.g. Rahul Sharma">
     </div>
 
-    <script>
-        function launchGPT() {
-            // 1. Get Data
-            const name = document.getElementById('cName').value || "Client";
-            const cals = document.getElementById('cCals').value;
-            const goal = document.getElementById('cGoal').value;
-            const type = document.getElementById('cType').value;
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>Gender</label>
+                <select id="gender">
+                    <option value="Male">Male 👨</option>
+                    <option value="Female">Female 👩</option>
+                </select>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" id="age" placeholder="28">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>Height (cm)</label>
+                <input type="number" id="height" placeholder="175" oninput="calculateBMI()">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>Current Weight (kg)</label>
+                <input type="number" id="weight" placeholder="80" oninput="calculateBMI()">
+            </div>
+        </div>
+    </div>
+
+    <div id="bmi-result" class="bmi-box">
+        BMI Score: <span id="bmi-score" class="bmi-text">--</span>
+        <br>Status: <span id="bmi-status">--</span>
+    </div>
+
+    <div class="form-group">
+        <label>Goal Weight (kg)</label>
+        <input type="number" id="goalWeight" placeholder="70">
+    </div>
+
+    <div class="form-group">
+        <label>Primary Goal</label>
+        <select id="goal">
+            <option>Fat Loss & Muscle Preservation (Shred)</option>
+            <option>Muscle Gain (Bulking)</option>
+            <option>Body Recomposition (Lose Fat + Gain Muscle)</option>
+            <option>General Fitness & Longevity</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Diet Preference</label>
+        <select id="diet">
+            <option>Non-Vegetarian (Chicken/Eggs/Fish)</option>
+            <option>Vegetarian (Dairy Allowed)</option>
+            <option>Vegan (Plant Based)</option>
+            <option>Eggetarian</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>💊 Medical & Supplement Needs</label>
+        <div class="checkbox-group">
+            <label><input type="checkbox" class="med" value="Diabetes"> Diabetes</label>
+            <label><input type="checkbox" class="med" value="PCOS/Hormonal"> PCOS/Hormonal</label>
+            <label><input type="checkbox" class="med" value="Joint Pain"> Joint Pain</label>
+            <label><input type="checkbox" class="med" value="High BP"> High BP</label>
+            <label><input type="checkbox" class="med" value="None" checked> None</label>
+        </div>
+        <p style="font-size: 0.8rem; color: #888; margin-top: 5px;">*AI will suggest Magnesium, Boron, etc based on these.</p>
+    </div>
+
+    <button class="btn" onclick="generatePrompt()">
+        <i class="fas fa-file-prescription"></i> Generate Official Prescription
+    </button>
+    
+    <p style="text-align: center; font-size: 0.8rem; color: #666; margin-top: 15px;">
+        1. Click Button (Copies Data) <br> 2. Paste into ChatGPT
+    </p>
+</div>
+
+<script>
+    function calculateBMI() {
+        let h = document.getElementById('height').value;
+        let w = document.getElementById('weight').value;
+        let box = document.getElementById('bmi-result');
+        
+        if(h > 0 && w > 0) {
+            let heightInMeters = h / 100;
+            let bmi = (w / (heightInMeters * heightInMeters)).toFixed(1);
+            let status = "";
+            let isBad = false;
+
+            if(bmi < 18.5) { status = "Underweight ⚠️"; isBad = true; }
+            else if(bmi < 24.9) { status = "Healthy Weight ✅"; isBad = false; }
+            else if(bmi < 29.9) { status = "Overweight ⚠️"; isBad = true; }
+            else { status = "Obese 🚨"; isBad = true; }
+
+            document.getElementById('bmi-score').innerText = bmi;
+            document.getElementById('bmi-status').innerText = status;
             
-            let conditions = [];
-            document.querySelectorAll('input[type=checkbox]:checked').forEach(box => {
-                if(box.value !== "None") conditions.push(box.value);
-            });
-            const medical = conditions.length ? conditions.join(", ") : "Perfectly Healthy";
-
-            // 2. Format Data Block
-            const dataBlock = `CLIENT DATA FOR PDF GENERATION:
-- Name: ${name}
-- Calories: ${cals}
-- Goal: ${goal}
-- Diet: ${type}
-- Medical Issues: ${medical}
-(Please generate the PDF file now using the Python Code Interpreter.)`;
-
-            // 3. Copy to Clipboard
-            navigator.clipboard.writeText(dataBlock).then(() => {
-                // 4. Open YOUR Custom GPT
-                const link = "https://chatgpt.com/g/g-696d05909dcc8191a400d4eeee3e7e5d-sk-elite-coach"; 
-                window.open(link, '_blank');
-            });
+            // Change color if unhealthy
+            if(isBad) {
+                box.classList.add('bmi-warning');
+            } else {
+                box.classList.remove('bmi-warning');
+            }
+            box.style.display = "block";
         }
-    </script>
+    }
+
+    function generatePrompt() {
+        let name = document.getElementById('name').value;
+        let gender = document.getElementById('gender').value;
+        let age = document.getElementById('age').value;
+        let height = document.getElementById('height').value;
+        let weight = document.getElementById('weight').value;
+        let goalWeight = document.getElementById('goalWeight').value;
+        let goal = document.getElementById('goal').value;
+        let diet = document.getElementById('diet').value;
+        let bmi = document.getElementById('bmi-score').innerText;
+        
+        let meds = [];
+        document.querySelectorAll('.med:checked').forEach((checkbox) => {
+            meds.push(checkbox.value);
+        });
+
+        // 🧠 THE BRANDED PRESCRIPTION PROMPT
+        let promptText = `
+Act as a Senior Head Coach at "SK ELITE FITNESS".
+Create a High-End, Official Fitness Prescription for a client. 
+
+🎨 **FORMATTING RULES (IMPORTANT):**
+- Do NOT output plain text. 
+- Use Markdown Tables for the Diet and Workout.
+- Use Bold Headers and visual separators.
+- The top of the response MUST look like a letterhead: "⚔️ SK ELITE FITNESS - OFFICIAL PRESCRIPTION ⚔️"
+
+👤 **CLIENT DETAILS:**
+- **Name:** ${name} (${gender}, Age: ${age})
+- **Current Status:** ${weight}kg | ${height}cm | BMI: ${bmi}
+- **Target:** ${goalWeight}kg
+- **Goal:** ${goal}
+- **Medical/Issues:** ${meds.join(", ")}
+
+📋 **GENERATE THE FOLLOWING REPORT:**
+
+### 1. 🩺 DIAGNOSIS & TIMELINE
+- Brief comment on their BMI (${bmi}).
+- Estimated time to reach ${goalWeight}kg realistically.
+
+### 2. 💊 SUPPLEMENT STACK (The "SK Prescription")
+Recommend specific supplements based on Gender (${gender}) and Goal.
+*Specifically check needs for:*
+- **Magnesium Glycinate** (Sleep/Recovery)
+- **Vitamin D3 + K2** (Bone/Immunity)
+- **Omega 3** (Inflammation)
+- **Whey Protein** (Muscle Recovery)
+- **Boron/Zinc** (Only if Male/Low T)
+- **Iron/Calcium** (Only if Female/Deficient)
+*Explain in 1 sentence WHY they need each.*
+
+### 3. 🥗 NUTRITION PROTOCOL (Use a Table)
+Create a clear table with columns: [ Meal | Time | Food Items | Macros ].
+- Diet Type: ${diet}
+- Include pre and post-workout nutrition.
+
+### 4. 🏋️ TRAINING SPLIT (Use a Table)
+Create a 5-Day Split Table: [ Day | Muscle Group | Key Exercises | Sets/Reps ].
+
+---
+*Signed, Coach Srikanth | SK Elite Fitness*
+`;
+
+        // Copy to Clipboard
+        navigator.clipboard.writeText(promptText).then(() => {
+            alert("✅ PRESCRIPTION DATA COPIED!\n\nI am opening ChatGPT now.\nJust PASTE (Ctrl+V) and hit Enter!");
+            window.open("https://chat.openai.com/", "_blank");
+        });
+    }
+</script>
+
 </body>
 </html>
