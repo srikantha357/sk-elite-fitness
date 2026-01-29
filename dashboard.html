@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK Elite | Coach Dashboard</title>
+    <title>SK Elite | PDF Prescription Generator</title>
     <script>
         var password = prompt("🛑 ADMIN ACCESS ONLY 🛑\nEnter the Coach Password:");
         if (password != "Coach123") { 
@@ -14,7 +14,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .container { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 650px; border-top: 6px solid #D32F2F; }
         
         h2 { text-align: center; color: #111; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
@@ -37,16 +37,24 @@
         .checkbox-group { display: flex; gap: 10px; flex-wrap: wrap; background: #fafafa; padding: 10px; border-radius: 8px; border: 1px solid #eee; }
         .checkbox-group label { font-weight: normal; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; cursor: pointer; }
         
-        .btn { width: 100%; padding: 16px; background-color: #D32F2F; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 15px; box-shadow: 0 4px 6px rgba(211, 47, 47, 0.2); }
-        .btn:hover { background-color: #b71c1c; transform: translateY(-2px); }
-        .fa-file-prescription { margin-right: 10px; }
+        /* THE MAGIC BUTTON */
+        .btn { 
+            width: 100%; padding: 16px; 
+            background: linear-gradient(135deg, #D32F2F, #b71c1c); 
+            color: white; border: none; border-radius: 8px; 
+            font-size: 1.1rem; font-weight: bold; cursor: pointer; 
+            transition: 0.3s; margin-top: 15px; 
+            box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3); 
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(211, 47, 47, 0.4); }
+        .fa-file-pdf { margin-right: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>SK Elite Fitness</h2>
-    <p class="subtitle">Client Prescription Generator</p>
+    <p class="subtitle">Official Plan Generator (PDF Edition)</p>
 
     <div class="form-group">
         <label>Client Name</label>
@@ -99,41 +107,40 @@
     <div class="form-group">
         <label>Primary Goal</label>
         <select id="goal">
-            <option>Fat Loss & Muscle Preservation (Shred)</option>
+            <option>Fat Loss (Shredding)</option>
             <option>Muscle Gain (Bulking)</option>
-            <option>Body Recomposition (Lose Fat + Gain Muscle)</option>
-            <option>General Fitness & Longevity</option>
+            <option>Body Recomposition</option>
+            <option>General Fitness</option>
         </select>
     </div>
 
     <div class="form-group">
         <label>Diet Preference</label>
         <select id="diet">
-            <option>Non-Vegetarian (Chicken/Eggs/Fish)</option>
-            <option>Vegetarian (Dairy Allowed)</option>
-            <option>Vegan (Plant Based)</option>
+            <option>Non-Vegetarian</option>
+            <option>Vegetarian</option>
+            <option>Vegan</option>
             <option>Eggetarian</option>
         </select>
     </div>
 
     <div class="form-group">
-        <label>💊 Medical & Supplement Needs</label>
+        <label>💊 Supplement Needs</label>
         <div class="checkbox-group">
             <label><input type="checkbox" class="med" value="Diabetes"> Diabetes</label>
-            <label><input type="checkbox" class="med" value="PCOS/Hormonal"> PCOS/Hormonal</label>
+            <label><input type="checkbox" class="med" value="PCOS"> PCOS</label>
             <label><input type="checkbox" class="med" value="Joint Pain"> Joint Pain</label>
-            <label><input type="checkbox" class="med" value="High BP"> High BP</label>
             <label><input type="checkbox" class="med" value="None" checked> None</label>
         </div>
-        <p style="font-size: 0.8rem; color: #888; margin-top: 5px;">*AI will suggest Magnesium, Boron, etc based on these.</p>
     </div>
 
     <button class="btn" onclick="generatePrompt()">
-        <i class="fas fa-file-prescription"></i> Generate Official Prescription
+        <i class="fas fa-file-pdf"></i> Generate PDF Prescription
     </button>
     
     <p style="text-align: center; font-size: 0.8rem; color: #666; margin-top: 15px;">
-        1. Click Button (Copies Data) <br> 2. Paste into ChatGPT
+        Clicking this will generate a <b>Python Command</b> for ChatGPT.<br>
+        ChatGPT will run the code and give you a <b>Downloadable PDF</b>.
     </p>
 </div>
 
@@ -157,12 +164,8 @@
             document.getElementById('bmi-score').innerText = bmi;
             document.getElementById('bmi-status').innerText = status;
             
-            // Change color if unhealthy
-            if(isBad) {
-                box.classList.add('bmi-warning');
-            } else {
-                box.classList.remove('bmi-warning');
-            }
+            if(isBad) box.classList.add('bmi-warning');
+            else box.classList.remove('bmi-warning');
             box.style.display = "block";
         }
     }
@@ -183,56 +186,38 @@
             meds.push(checkbox.value);
         });
 
-        // 🧠 THE BRANDED PRESCRIPTION PROMPT
+        // 🧠 THE PDF-GENERATION COMMAND
+        // We instruct ChatGPT to write Python code to create the PDF file.
         let promptText = `
-Act as a Senior Head Coach at "SK ELITE FITNESS".
-Create a High-End, Official Fitness Prescription for a client. 
+You are the AI Data Analyst for "SK ELITE FITNESS".
+I need you to generate a DOWNLOADABLE PDF FILE of a workout and diet plan.
 
-🎨 **FORMATTING RULES (IMPORTANT):**
-- Do NOT output plain text. 
-- Use Markdown Tables for the Diet and Workout.
-- Use Bold Headers and visual separators.
-- The top of the response MUST look like a letterhead: "⚔️ SK ELITE FITNESS - OFFICIAL PRESCRIPTION ⚔️"
+DO NOT write the plan in text. 
+WRITE AND EXECUTE PYTHON CODE to generate a PDF file named "SK_Elite_Plan_${name.replace(/\s/g, '_')}.pdf".
 
-👤 **CLIENT DETAILS:**
-- **Name:** ${name} (${gender}, Age: ${age})
-- **Current Status:** ${weight}kg | ${height}cm | BMI: ${bmi}
-- **Target:** ${goalWeight}kg
-- **Goal:** ${goal}
-- **Medical/Issues:** ${meds.join(", ")}
+📊 **DATA FOR THE PDF:**
+- Client: ${name} (${gender}, ${age} yrs)
+- Stats: ${weight}kg | ${height}cm | BMI: ${bmi}
+- Goal: ${goal} (Target: ${goalWeight}kg)
+- Diet: ${diet}
+- Medical: ${meds.join(", ")}
 
-📋 **GENERATE THE FOLLOWING REPORT:**
+📄 **PDF STRUCTURE (Use ReportLab or FPDF library):**
+1. **Header:** Large Bold Title "SK ELITE FITNESS - OFFICIAL PRESCRIPTION".
+2. **Client Profile:** A summary box of their stats.
+3. **Supplement Stack:**
+   - Recommend supplements based on ${gender} and ${goal}.
+   - Include: Magnesium, D3, Whey, and Zinc/Iron (if gender appropriate).
+   - Add a "Why?" column.
+4. **Diet Plan:** A neat table with [Meal, Time, Food, Macros].
+5. **Workout Split:** A neat table for a 5-Day Split.
 
-### 1. 🩺 DIAGNOSIS & TIMELINE
-- Brief comment on their BMI (${bmi}).
-- Estimated time to reach ${goalWeight}kg realistically.
-
-### 2. 💊 SUPPLEMENT STACK (The "SK Prescription")
-Recommend specific supplements based on Gender (${gender}) and Goal.
-*Specifically check needs for:*
-- **Magnesium Glycinate** (Sleep/Recovery)
-- **Vitamin D3 + K2** (Bone/Immunity)
-- **Omega 3** (Inflammation)
-- **Whey Protein** (Muscle Recovery)
-- **Boron/Zinc** (Only if Male/Low T)
-- **Iron/Calcium** (Only if Female/Deficient)
-*Explain in 1 sentence WHY they need each.*
-
-### 3. 🥗 NUTRITION PROTOCOL (Use a Table)
-Create a clear table with columns: [ Meal | Time | Food Items | Macros ].
-- Diet Type: ${diet}
-- Include pre and post-workout nutrition.
-
-### 4. 🏋️ TRAINING SPLIT (Use a Table)
-Create a 5-Day Split Table: [ Day | Muscle Group | Key Exercises | Sets/Reps ].
-
----
-*Signed, Coach Srikanth | SK Elite Fitness*
+⚡ **ACTION:**
+Run the python code immediately and provide the **Download Link** for the PDF.
 `;
 
-        // Copy to Clipboard
         navigator.clipboard.writeText(promptText).then(() => {
-            alert("✅ PRESCRIPTION DATA COPIED!\n\nI am opening ChatGPT now.\nJust PASTE (Ctrl+V) and hit Enter!");
+            alert("✅ COMMAND COPIED!\n\n1. Go to ChatGPT.\n2. PASTE (Ctrl+V).\n3. Wait for it to 'Analyze' and give you the File Download Link!");
             window.open("https://chat.openai.com/", "_blank");
         });
     }
