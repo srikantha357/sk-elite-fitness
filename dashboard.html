@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK Elite | Professional Plan Generator</title>
+    <title>SK Elite | Pro PDF Generator</title>
     <script>
         var password = prompt("🛑 SK ELITE ADMIN ACCESS 🛑\nEnter the Coach Password:");
         if (password != "Coach123") { 
@@ -25,7 +25,6 @@
         input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; transition: 0.3s; }
         input:focus, select:focus { border-color: #D32F2F; outline: none; }
 
-        /* BMI BOX STYLE */
         .bmi-box { background: #e3f2fd; padding: 15px; border-radius: 8px; border-left: 5px solid #2196F3; margin-bottom: 20px; display: none; }
         .bmi-text { font-size: 1.2rem; font-weight: bold; color: #0d47a1; }
         .bmi-warning { background: #ffebee; border-left: 5px solid #c62828; }
@@ -37,7 +36,6 @@
         .checkbox-group { display: flex; gap: 10px; flex-wrap: wrap; background: #fafafa; padding: 10px; border-radius: 8px; border: 1px solid #eee; }
         .checkbox-group label { font-weight: normal; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; cursor: pointer; }
         
-        /* THE MAGIC BUTTON */
         .btn { 
             width: 100%; padding: 18px; 
             background: linear-gradient(135deg, #D32F2F, #b71c1c); 
@@ -105,7 +103,7 @@
     </div>
 
     <div class="form-group">
-        <label>🎯 Specific Goal (Calorie Adjuster)</label>
+        <label>🎯 Specific Goal</label>
         <select id="goal">
             <option value="Fat Loss">Fat Loss (Standard Deficit)</option>
             <option value="Get Shredded">Get Shredded (Aggressive Deficit)</option>
@@ -143,13 +141,11 @@
     </button>
     
     <p style="text-align: center; font-size: 0.8rem; color: #666; margin-top: 15px;">
-        Clicking this will generate a <b>Fixed Layout Python Script</b>.<br>
-        Paste into ChatGPT -> It will create a perfectly aligned PDF.
+        1. Click Button -> 2. Paste into ChatGPT -> 3. Download PDF
     </p>
 </div>
 
 <script>
-    // ✅ 1. THE BMI CALCULATOR FUNCTION
     function calculateBMI() {
         let h = document.getElementById('height').value;
         let w = document.getElementById('weight').value;
@@ -169,17 +165,12 @@
             document.getElementById('bmi-score').innerText = bmi;
             document.getElementById('bmi-status').innerText = status;
             
-            // Change color if unhealthy
-            if(isBad) {
-                box.classList.add('bmi-warning');
-            } else {
-                box.classList.remove('bmi-warning');
-            }
+            if(isBad) box.classList.add('bmi-warning');
+            else box.classList.remove('bmi-warning');
             box.style.display = "block";
         }
     }
 
-    // ✅ 2. THE ALIGNMENT-FIXED PROMPT GENERATOR
     function generatePrompt() {
         let name = document.getElementById('name').value;
         let gender = document.getElementById('gender').value;
@@ -196,40 +187,39 @@
             meds.push(checkbox.value);
         });
 
-        // 🧠 THE "FIXED ALIGNMENT" PROMPT
+        // 🧠 THE "MULTI-PAGE & WRAPPING" PROMPT
         let promptText = `
-I need you to generate a PDF using Python (ReportLab).
-You MUST fix the table column widths to prevent text overlapping.
+I need you to generate a PROFESSIONAL PDF using Python (ReportLab).
+You MUST use "Paragraph" styles in the table cells so the text wraps properly. 
+Do not squeeze everything onto one page. If it needs 2 pages, that is fine.
 
 **🐍 PYTHON INSTRUCTIONS:**
-1. Use 'from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph'
-2. Use 'getSampleStyleSheet' for text wrapping.
-3. **CRITICAL:** When creating the DIET TABLE, set explicit column widths: colWidths=[1.2*inch, 4.5*inch, 1.5*inch]. This gives the middle column enough space.
-4. Use 'Paragraph(text, styles["Normal"])' inside the table cells so text wraps automatically.
+1. Import: 'from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer'
+2. Import: 'from reportlab.lib.styles import getSampleStyleSheet'
+3. **CRITICAL:** Use 'styles["Normal"]' to wrap text inside table cells.
+   - Example: data = [[Paragraph("Long text here...", styles["Normal"]), "Next Col"]]
+4. **Column Widths:** Set 'colWidths=[1.2*inch, 4.0*inch, 1.8*inch]' for the Diet Table to give the food column maximum space.
 
-**📊 CONTENT FOR THE PDF:**
-- **Header:** "SK ELITE FITNESS - OFFICIAL PRESCRIPTION" (Large, Bold, Centered)
-- **Client Box:** Name: ${name} | ${gender}, ${age} | ${weight}kg -> ${goalWeight}kg | BMI: ${bmi}
-- **Goal:** ${goal} (Plan Type)
+**📊 PDF CONTENT:**
+- **Header:** "SK ELITE FITNESS - OFFICIAL PRESCRIPTION" (Centered, Bold, Large Font)
+- **Client Summary:** Name: ${name} (${gender}, ${age}) | ${weight}kg -> Target: ${goalWeight}kg | BMI: ${bmi} | Goal: ${goal}
+- **Medical Note:** ${meds.join(", ")}
 
-**🥗 DIET PLAN DATA:**
-- Create a Table with headers: [ "MEAL TIME", "FOODSTUFFS (Ingredients & Grams)", "MACROS" ]
+**🥗 DIET PLAN TABLE:**
+- Headers: [ "MEAL TIME", "FOODSTUFFS (Ingredients & Grams)", "MACROS" ]
 - **Diet Type:** ${diet}
-- **Important:** List specific grams (e.g. "150g Rice"). Do not put all text on one line; let it wrap.
+- **Requirement:** List specific grams (e.g. "150g Rice"). Use Paragraphs so long lists wrap to the next line.
+- **Calorie Calculation:** Exact macros for a ${weight}kg person aiming for ${goalWeight}kg.
 
-**💊 SUPPLEMENTS:**
-- Create a neat list or small table.
-- Include: Magnesium, D3, Whey. (Add Zinc/Boron if Male, Iron/Calcium if Female).
+**💊 SUPPLEMENT STACK:**
+- List recommended supplements with a "Why?" explanation.
 
 **⚡ ACTION:**
-Write and execute the Python code to generate "SK_Elite_${name.replace(/\s/g, '_')}.pdf" and provide the download link.
+Write and execute the Python code. Provide the download link for "SK_Elite_${name.replace(/\s/g, '_')}.pdf".
 `;
 
-        // 1. Copy the Command
         navigator.clipboard.writeText(promptText).then(() => {
-            alert("✅ ALIGNMENT FIX COPIED!\n\n1. Go to Custom Coach AI.\n2. Paste & Enter.\n\nThe PDF columns will now be perfectly spaced!");
-            
-            // 2. Open YOUR Custom GPT Link
+            alert("✅ FIX COPIED!\n\nI added the 'Paragraph Style' command.\nText will now wrap perfectly and not get cut off.\n\nOpening your Coach AI...");
             window.open("https://chatgpt.com/c/696f09f9-28a4-8324-8dfc-bb7dbbf6a3ce", "_blank");
         });
     }
