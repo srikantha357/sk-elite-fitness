@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SK Elite | Master Coach Dashboard</title>
+    <title>SK Elite | Professional Plan Generator</title>
     <script>
         var password = prompt("🛑 SK ELITE ADMIN ACCESS 🛑\nEnter the Coach Password:");
         if (password != "Coach123") { 
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #f4f6f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); width: 100%; max-width: 700px; border-top: 6px solid #D32F2F; }
+        .container { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); width: 100%; max-width: 750px; border-top: 6px solid #D32F2F; }
         
         h2 { text-align: center; color: #111; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
         .subtitle { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 30px; }
@@ -54,7 +54,7 @@
 
 <div class="container">
     <h2>SK Elite Fitness</h2>
-    <p class="subtitle">Advanced Client Prescription System</p>
+    <p class="subtitle">Professional PDF Prescription System</p>
 
     <div class="form-group">
         <label>Client Name</label>
@@ -112,7 +112,6 @@
             <option value="Body Recomposition">Body Recomposition (Lose Fat + Muscle Gain)</option>
             <option value="Lean Muscle Gain">Lean Muscle Gain (Slight Surplus)</option>
             <option value="Bulking">Bulking (High Surplus)</option>
-            <option value="Endurance">Endurance/Performance</option>
         </select>
     </div>
 
@@ -140,11 +139,12 @@
     </div>
 
     <button class="btn" onclick="generatePrompt()">
-        <i class="fas fa-magic"></i> Generate PDF via Coach AI
+        <i class="fas fa-file-pdf"></i> Generate Fixed PDF
     </button>
     
     <p style="text-align: center; font-size: 0.8rem; color: #666; margin-top: 15px;">
-        1. Click Button (Copies Data) <br> 2. Your Custom AI Opens <br> 3. Paste (Ctrl+V) & Download PDF
+        Clicking this will generate a <b>Fixed Layout Python Script</b>.<br>
+        Paste into ChatGPT -> It will create a perfectly aligned PDF.
     </p>
 </div>
 
@@ -179,7 +179,7 @@
         }
     }
 
-    // ✅ 2. THE PDF PROMPT GENERATOR
+    // ✅ 2. THE ALIGNMENT-FIXED PROMPT GENERATOR
     function generatePrompt() {
         let name = document.getElementById('name').value;
         let gender = document.getElementById('gender').value;
@@ -189,46 +189,45 @@
         let goalWeight = document.getElementById('goalWeight').value;
         let goal = document.getElementById('goal').value;
         let diet = document.getElementById('diet').value;
-        let bmi = document.getElementById('bmi-score').innerText; // Grabs the calculated BMI
+        let bmi = document.getElementById('bmi-score').innerText; 
         
         let meds = [];
         document.querySelectorAll('.med:checked').forEach((checkbox) => {
             meds.push(checkbox.value);
         });
 
-        // 🧠 THE "PRESCRIPTION STYLE" PROMPT
+        // 🧠 THE "FIXED ALIGNMENT" PROMPT
         let promptText = `
-I need a DOWNLOADABLE PDF PRESCRIPTION.
-Use Python to generate a PDF file named "SK_Elite_${name.replace(/\s/g, '_')}.pdf".
+I need you to generate a PDF using Python (ReportLab).
+You MUST fix the table column widths to prevent text overlapping.
 
-🚨 **STRICT FORMATTING RULES:**
-1. **Header:** "SK ELITE FITNESS - DIET & TRAINING PRESCRIPTION"
-2. **Client Stats Box:** Name: ${name} | ${gender} | ${weight}kg | Height: ${height}cm | BMI: ${bmi}
-3. **Goal Analysis:** Plan type: ${goal}. Target Weight: ${goalWeight}kg.
+**🐍 PYTHON INSTRUCTIONS:**
+1. Use 'from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph'
+2. Use 'getSampleStyleSheet' for text wrapping.
+3. **CRITICAL:** When creating the DIET TABLE, set explicit column widths: colWidths=[1.2*inch, 4.5*inch, 1.5*inch]. This gives the middle column enough space.
+4. Use 'Paragraph(text, styles["Normal"])' inside the table cells so text wraps automatically.
 
-🥗 **DIET TABLE (MUST BE EXACTLY LIKE THIS):**
-Create a table with columns: [ MEAL TIME | FOODSTUFFS (Specific Grams) | MACROS ].
-- **Quantities:** You MUST specify grams (e.g., "150g Cooked Rice", "100g Chicken Breast"). Do not say "1 bowl".
-- **Vegetables:** Specify which vegetables and grams.
-- **Diet Type:** ${diet}.
-- **Calorie Calculation:** Calculate exact calories for a ${weight}kg person wanting to reach ${goalWeight}kg via "${goal}".
+**📊 CONTENT FOR THE PDF:**
+- **Header:** "SK ELITE FITNESS - OFFICIAL PRESCRIPTION" (Large, Bold, Centered)
+- **Client Box:** Name: ${name} | ${gender}, ${age} | ${weight}kg -> ${goalWeight}kg | BMI: ${bmi}
+- **Goal:** ${goal} (Plan Type)
 
-💊 **SUPPLEMENT STACK:**
-- Based on ${gender} and Goal.
-- Include: Magnesium, D3, Whey.
-- If Male/Muscle: Add Zinc/Boron.
-- If Female/Bone Health: Add Calcium/Iron.
+**🥗 DIET PLAN DATA:**
+- Create a Table with headers: [ "MEAL TIME", "FOODSTUFFS (Ingredients & Grams)", "MACROS" ]
+- **Diet Type:** ${diet}
+- **Important:** List specific grams (e.g. "150g Rice"). Do not put all text on one line; let it wrap.
 
-🏋️ **TRAINING:**
-- 5 Day Split Table.
+**💊 SUPPLEMENTS:**
+- Create a neat list or small table.
+- Include: Magnesium, D3, Whey. (Add Zinc/Boron if Male, Iron/Calcium if Female).
 
-⚡ **ACTION:**
-Run Python Code -> Generate PDF -> Provide Download Link.
+**⚡ ACTION:**
+Write and execute the Python code to generate "SK_Elite_${name.replace(/\s/g, '_')}.pdf" and provide the download link.
 `;
 
         // 1. Copy the Command
         navigator.clipboard.writeText(promptText).then(() => {
-            alert("✅ CLIENT DATA COPIED!\n\nI am taking you to your Custom Coach AI now.\n\n👉 Just PASTE (Ctrl+V) and hit Enter!");
+            alert("✅ ALIGNMENT FIX COPIED!\n\n1. Go to Custom Coach AI.\n2. Paste & Enter.\n\nThe PDF columns will now be perfectly spaced!");
             
             // 2. Open YOUR Custom GPT Link
             window.open("https://chatgpt.com/c/696f09f9-28a4-8324-8dfc-bb7dbbf6a3ce", "_blank");
